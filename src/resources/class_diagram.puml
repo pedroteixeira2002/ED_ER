@@ -1,0 +1,101 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Map
+class Player
+class Bot
+class Game
+class Algorithm
+class Flag
+
+class Game {
+    - map : Map
+    - player1 : Player
+    - player2 : Player
+    - currentPlayer : Player
+    - round : int
+    + getters() and setters()
+    + startGame() : void
+    + checkGameOver() : boolean
+    + getWinner() : Player
+}
+
+class Map {
+    - graphMap : NetworkEnhanced<Location>
+    - flagLocations : OrderedLinkedList<Location>
+    + generateMap() : Map
+    + importMap() : void
+    + exportMap() : void
+}
+
+
+class Location {
+    - positionX : int
+    - positionY : int
+    + getters() and setters()
+}
+class Flag {
+    - location : Location
+    - owner : Player
+    + getters() and setters()
+}
+
+class Player {
+    - id : int
+    - name : String
+    - bots : UnorderedLinkedList<Bot>
+    + getters() and setters()
+}
+class Bot {
+    - id : int
+    - algorithm : Algorithm
+    - location : Location
+    + getters() and setters()
+
+}
+
+class Algorithm {
+    + move() : Location
+}
+
+
+
+
+
+
+@enduml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class CaptureTheFlag{
+  Map map ;
+  Player player1m, player2 ;
+
+    public CaptureTheFlag() {
+        this.map = new Map;
+        this.player1 = new Player;
+        this.player2 = new Player;
+    }
+}
+

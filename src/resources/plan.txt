@@ -1,0 +1,101 @@
+
+
+ ___________________________________________________________________
+|                        Flow do jogo                               |
+|___________________________________________________________________|
+| 1. Gerar novo mapa                                                |
+| 2. Selecionar localização das bandeiras no mapa                   |
+| 3. Definir o número de bots                                       |
+| 4. Atribuir algoritmo de movimentação aos bots                    |
+| 5. Decidir aleatoriamente quem começa o jogo                      |
+| 6. Mover os bots, ronda a ronda                                   |
+| 7. O jogo termina quando um dos bots chega ao campo do adversário |
+|___________________________________________________________________|
+
+_________________________________________________________________________________
+|                        Questões a ter atenção                                  |
+|________________________________________________________________________________|
+|   y  1.1 Deverá ser possível importar um mapa que terá sido previamente definido    |
+|noutra instância do programa e consequentemente, exportá-lo                     |
+|   y  1.2 Configurar as características do mapa                                      |
+|   y     1.2.1 Definir quantidade de localizações existentes no mapa                 |
+|   y     1.2.2 Definir o tipo dos caminhos que serão gerados(bidirecionais ou não)   |
+|   y     1.2.3 Definir densidade das arestas                                         |
+|   y     1.2.4 Gerar aleatoriamente o mapa após as definições anteriores             |
+|   y     1.2.5 Gerar automaticamente distâncias entre pontos (entre 1 a 15km)        |
+|   y     1.2.6 Adicionar opção para guardar mapa de forma a utilizar noutra partida  |
+|   y 4.1 Desenvolver algoritmos para deslocação dos bots                            |
+|   y    4.1.1 Garantir que os algoritmos só se repetem se o número de bots ultrapassar o número de algoritmos disponível                                       |
+|   y 5.1 Todos os bots deverão estar localizados na mesma posição da bandeira       |
+|  fn 6.1 Os bots movem-se um de cada vez (bot1, bot2, bot3, etc)                    |
+|  fn     6.1.1 Quando não há mais bots volta ao primeiro(Na quarta ronda, deve voltar ao bot 1.                                                                       |
+|   y 7.1 Um bot não pode estar na mesma localização de outro,| exceto se for a       |
+|         localização de uma bandeira .                                                   |
+|   n 8. Deverá ser possível acompanhar visualmente as movimentações realizadas      |
+|   y 9. Deverão ser criados pelo menos 3 algarismos de movimentação dos bots        |
+|  !n 10. Desenvolver menus                                                          |
+|________________________________________________________________________________|
+
+ ___________________________________________________________________
+|           Possíseis classes relativas à componente jogo           |
+|___________________________________________________________________|
+| MapList                                                           |
+| Map                                                               |
+| Player                                                            |
+| Bot                                                               |
+| Algorithm                                                         |
+| Algorithms                                                        |
+|___________________________________________________________________|
+
+ ___________________________________________________________________
+|                                  Menu                             |
+|___________________________________________________________________|
+| 1. Novo Jogo                                                      |
+| ....
+|___________________________________________________________________|
+
+ ___________________________________________________________________
+|     1                        Novo jogo                            |
+|___________________________________________________________________|
+|                                                                   |
+| 1. Criar novo mapa                                                |
+| 2. Importar mapa                                                  |
+|___________________________________________________________________|
+
+ ___________________________________________________________________
+|      1                       Criar mapa                           |
+|___________________________________________________________________|
+|                                                                   |
+|  Deseja guardar o mapa que criou?                                 |
+|___________________________________________________________________|
+
+
+
+ ___________________________________________________________________
+|                              Algoritmos                           |
+|___________________________________________________________________|
+|                                                                   |
+|    1. Bot que ataca pelo caminho mais curto                       |
+|                                                                   |
+|    3. Bot que se movimenta de forma random                        |
+|                                                                   |
+|    4. Bot que defende (movimenta-se conforme o outro jogador)     |
+|___________________________________________________________________|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
