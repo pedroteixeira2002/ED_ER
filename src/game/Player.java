@@ -1,26 +1,26 @@
 package game;
 
-import collections.lists.OrderedLinkedList;
+import collections.queues.CircularArrayQueue;
 import interfaces.IPlayer;
 
 public class Player implements IPlayer {
     private String name;
-    private OrderedLinkedList<Bot> listBots;
+    private CircularArrayQueue<Bot> circularBots;
     private Flag flag;
 
     public Player(String name, Flag flag) {
         this.name = name;
-        this.listBots = new OrderedLinkedList<>();
+        this.circularBots = new CircularArrayQueue<>();
         this.flag = flag;
     }
-
     public Player() {
         this.name = new String();
-        this.listBots = new OrderedLinkedList<>();
-        this.flag = null;
+        this.circularBots = new CircularArrayQueue<>();
+        this.flag = new Flag(null);
     }
-
-
+    public CircularArrayQueue<Bot> getCircularBots() {
+        return circularBots;
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -35,9 +35,5 @@ public class Player implements IPlayer {
 
     public void setFlag(Flag flag) {
         this.flag = flag;
-    }
-
-    public OrderedLinkedList<Bot> getListBots() {
-        return listBots;
     }
 }

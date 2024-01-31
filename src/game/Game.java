@@ -39,6 +39,7 @@ public class Game implements IGame {
         addBots(this);
         Iterator<Bot> firstBots = player1.getListBots().iterator();
         Iterator<Bot> secondBots = player2.getListBots().iterator();
+        player1.getCircularBots().first();
         do {
             firstBots.next().setLocation(firstBots.next().getAlgorithm().move(game));
             secondBots.next().setLocation(secondBots.next().getAlgorithm().move(game));
@@ -46,13 +47,13 @@ public class Game implements IGame {
             if (!(firstBots.hasNext() || secondBots.hasNext())) {
 //                firstBots.next() = firstBots.next().getOwner().getListBots().head.getElement();
             }
-        }while(firstBots.next().getLocation().equals(player2.getFlag()) ||
+        } while (firstBots.next().getLocation().equals(player2.getFlag()) ||
                 secondBots.next().getLocation().equals(player1.getFlag()));
 
 
     }
 
-    public void round(Game game){
+    public void round(Game game) {
 
         round++;
     }
@@ -67,6 +68,7 @@ public class Game implements IGame {
                 addingBots = false;
         }
     }
+
     private void addBot(Game game, Player player) throws IOException {
         boolean canAddBot;
         do {
@@ -84,17 +86,15 @@ public class Game implements IGame {
                         "\n\t3.BlockClosestEnemy" +
                         "\n\t4.RandomPath");
 
-        Bot bot = new Bot(game);
-
-        Iterator<Bot> bots = player.getListBots().iterator();
-
-        if (bots.next().getAlgorithm().equals(bot.getAlgorithm())) {
+        //if (bots.next().getAlgorithm().equals(bot.getAlgorithm())) {
+        if (player.getCircularBots().first().getAlgorithm().equals()
             occurrences++;
-        }
+
         if (occurrences == algorithmCanAppear)
             return false;
 
-        player.getListBots().add(ReadInfo.newBot(game));
+
+        player.getCircularBots().enqueue(ReadInfo.newBot(game));
         return true;
 
     }

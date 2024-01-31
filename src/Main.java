@@ -41,16 +41,6 @@ public class Main {
         }
 
         */
-        Game game = new Game();
-
-        Bot bot1 = new Bot(game);
-        Bot bot2 = new Bot(game);
-        Bot bot3 = new Bot(game);
-        Bot bot4 = new Bot(game);
-        Bot bot5 = new Bot(game);
-
-
-
 
         //Menu.MainMenu();
     }
