@@ -9,6 +9,7 @@ import move_algorithms.RandomPath;
 import move_algorithms.ShortestPath;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class Game implements IGame {
@@ -125,6 +126,25 @@ public class Game implements IGame {
             return false;
         }
         return true;
+
+    }
+
+    /**
+     * Set the flag of the player in our base of the map
+     * @param player
+     */
+    public void setPlayerFlagInMap(Player player) {
+        int xCoordinate = ReadInfo.readCoordinateX();
+        int yCoordinate = ReadInfo.readCoordinateY();
+
+        System.out.println("Available locations: ");
+        System.out.println(Arrays.toString(map.getGraphMap().getVertices()));
+        System.out.println("Choose a location for your flag");
+        // Acho que é preciso associar ao mapa quando inseres as coordenadas ou então não e estou a fazer confusão
+        player.getFlag().getLocation().setPosX(xCoordinate);
+        player.getFlag().getLocation().setPosY(yCoordinate);
+        System.out.println(player.getName() + "'s flag was set at the following location X:" + xCoordinate + " Y:"
+                + yCoordinate);
 
     }
 
