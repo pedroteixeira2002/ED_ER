@@ -1,6 +1,7 @@
 package menu;
 
 import game.*;
+import interfaces.IAlgorithm;
 
 import java.io.IOException;
 
@@ -49,10 +50,10 @@ public class ReadInfo {
     }
 
 
-    public static Bot newBot(Game game) throws IOException {
+    public static Bot newBot(Game game, IAlgorithm algorithm) throws IOException {
         System.out.println("Add your bot");
-        Bot bot = new Bot(game);
-        bot.setAlgorithm(game);
+        Bot bot = new Bot(game, algorithm);
+
         return bot;
     }
 

@@ -1,24 +1,24 @@
 package game;
 
-import collections.queues.CircularArrayQueue;
+import collections.lists.arrayLists.ArrayOrderedList;
 import interfaces.IPlayer;
 
 public class Player implements IPlayer {
     private String name;
-    private CircularArrayQueue<Bot> circularBots;
+    private ArrayOrderedList<Bot> circularBots;
     private Flag flag;
 
     public Player(String name, Flag flag) {
         this.name = name;
-        this.circularBots = new CircularArrayQueue<>();
+        this.circularBots = new ArrayOrderedList<>();
         this.flag = flag;
     }
     public Player() {
         this.name = new String();
-        this.circularBots = new CircularArrayQueue<>();
+        this.circularBots = new ArrayOrderedList<>();
         this.flag = new Flag(null);
     }
-    public CircularArrayQueue<Bot> getCircularBots() {
+    public ArrayOrderedList<Bot> getBots() {
         return circularBots;
     }
     public void setName(String name) {

@@ -1,4 +1,4 @@
-package move_algorithms;
+package algorithms;
 
 import collections.lists.OrderedLinkedList;
 import game.*;
@@ -7,20 +7,13 @@ import structures.NetworkEnhance;
 
 import java.util.Iterator;
 
-public class BlockClosestEnemyBot implements IAlgorithm {
+public class ShortestPath implements IAlgorithm {
     private NetworkEnhance<Location> map;
     private OrderedLinkedList<Bot> bots;
     private Flag opponentFlag;
     private Flag myFlag;
     private Location myLocation;
     private Game game;
-    public BlockClosestEnemyBot(Game game) {
-        this.map = game.getMap().getGraphMap();
-        this.opponentFlag = getOpponent(game).getFlag();
-        this.myLocation = getMe(game).getFlag().getLocation();
-        this.myFlag = getMe(game).getFlag();
-        this.game = game;
-    }
 
     public NetworkEnhance<Location> getMap() {
         return map;
@@ -70,38 +63,50 @@ public class BlockClosestEnemyBot implements IAlgorithm {
         this.game = game;
     }
 
+    public ShortestPath(Game game) {
+        this.map = game.getMap().getGraphMap();
+        this.opponentFlag = getOpponent(game).getFlag();
+        this.myLocation = getMe(game).getFlag().getLocation();
+        this.myFlag = getMe(game).getFlag();
+        //do bots
+        this.game = game;
+    }
+
     @Override
     public Location move(Game game) {
-        NetworkEnhance<Location> tempMap = getMap();
-        Iterator<Location> list = tempMap.iteratorShortestPath(getMyLocation(), findNearestEnemyBot(game, tempMap));
-        if (findNearestEnemyBot(game, tempMap).equals(list.next())) {
-            System.out.println("You are now blocking your opponent move!");
-            return getMyLocation();
-        }
+
+        NetworkEnhance<Location> newMap;
+
+        newMap = botInTheWay(getMap());
+
+        Iterator<Location> list = newMap.iteratorShortestPath
+                (getMyLocation(),getOpponentFlag().getLocation());
         setMyLocation(list.next());
+
+        double shortestPathWeight = newMap.shortestPathWeight
+                (getMyLocation(), getOpponentFlag().getLocation());
+        System.out.println("Actual Shortest Path Weight: " + shortestPathWeight);
+
         return getMyLocation();
     }
 
-    @Override
     public NetworkEnhance<Location> botInTheWay(NetworkEnhance<Location> map) {
-        return null;
-    }
+        Iterator<Location> list = map.iteratorShortestPath
+                (myLocation, opponentFlag.getLocation());
 
-    private Location findNearestEnemyBot(Game game, NetworkEnhance<Location> map) {
-        Bot nearestEnemyBot = null;
-        double shortestPath = Double.POSITIVE_INFINITY;
-        for (Bot bot : getBots()) {
-            if (bot.getOwner().equals(getOpponent(game))) {
-                if (map.shortestPathWeight(getMyLocation(), bot.getLocation()) <= shortestPath) {
-                    shortestPath = map.shortestPathWeight
-                            (getMyLocation(), bot.getLocation());
-                    nearestEnemyBot = bot;
-                    System.out.println("Actual Shortest Path Weight: " + shortestPath +
-                            "Bot: " + bot.getAlgorithm());
+        Iterator<Bot> botIterator = bots.iterator();
+        while (botIterator.hasNext()) {
+            Bot nextBot = botIterator.next();
+            do {
+                if (nextBot.getLocation().equals(list.next()) &&
+                        !nextBot.getLocation().equals(myFlag) &&
+                        !nextBot.getLocation().equals(opponentFlag)) {
+                    System.out.println("Bot in the way");
+                    map.removeVertex(nextBot.getLocation());
                 }
-            }
+            } while (list.hasNext());
         }
-        return nearestEnemyBot != null ? nearestEnemyBot.getLocation() : getOpponentFlag().getLocation();
+        return map;
     }
     Player getOpponent(Game game) {
         if (game.getRound() % 2 == 0)
@@ -116,10 +121,11 @@ public class BlockClosestEnemyBot implements IAlgorithm {
             return game.getPlayer2();
         }
     }
+
     @Override
     public String toString() {
-        return "\nThis Algorithm tries to block the closest opponent bot. " +
-                "The bot will pursuit the opponent bot the whole game. " +
-                "The purpose of this bot is not to achieve the flag.";
+        return "This Algorithm uses the shortest path to the flag. " +
+                "The bot will use the shortest path to the flag and move there.";
     }
 }
+

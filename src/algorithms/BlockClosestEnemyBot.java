@@ -1,24 +1,20 @@
-package move_algorithms;
+package algorithms;
 
 import collections.lists.OrderedLinkedList;
 import game.*;
 import interfaces.IAlgorithm;
 import structures.NetworkEnhance;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
-public class RandomPath implements IAlgorithm {
+public class BlockClosestEnemyBot implements IAlgorithm {
     private NetworkEnhance<Location> map;
     private OrderedLinkedList<Bot> bots;
     private Flag opponentFlag;
     private Flag myFlag;
     private Location myLocation;
     private Game game;
-
-    public RandomPath(Game game) {
+    public BlockClosestEnemyBot(Game game) {
         this.map = game.getMap().getGraphMap();
         this.opponentFlag = getOpponent(game).getFlag();
         this.myLocation = getMe(game).getFlag().getLocation();
@@ -76,18 +72,13 @@ public class RandomPath implements IAlgorithm {
 
     @Override
     public Location move(Game game) {
-
-        NetworkEnhance<Location> newMap;
-        newMap = botInTheWay(getMap());
-
-        Location randomLocation = randomLocation(newMap);
-
-        setMyLocation(randomLocation);
-
-        if (getMyLocation().equals(getOpponentFlag())) {
-            System.out.println("Winner:" + getMe(game));
+        NetworkEnhance<Location> tempMap = getMap();
+        Iterator<Location> list = tempMap.iteratorShortestPath(getMyLocation(), findNearestEnemyBot(game, tempMap));
+        if (findNearestEnemyBot(game, tempMap).equals(list.next())) {
+            System.out.println("You are now blocking your opponent move!");
+            return getMyLocation();
         }
-
+        setMyLocation(list.next());
         return getMyLocation();
     }
 
@@ -96,23 +87,21 @@ public class RandomPath implements IAlgorithm {
         return null;
     }
 
-    private Location randomLocation(NetworkEnhance<Location> map) {
-        Object[] vertices = map.getVertices();
-        if (vertices == null || vertices.length == 0)
-            throw new RuntimeException("There are no locations in the map");
-
-        List<Location> verticesList = Arrays.asList(Arrays.copyOf(vertices, vertices.length, Location[].class));
-        Iterator<Location> vList = map.iteratorDFS(map.getVertex(0));
-        Iterator<Location> iterator = map.iteratorDFS(verticesList.get(0));
-
-
-        Random random = new Random();
-        int steps = random.nextInt(verticesList.size());
-
-        for (int i = 0; i < steps && iterator.hasNext(); i++) {
-            iterator.next();
+    private Location findNearestEnemyBot(Game game, NetworkEnhance<Location> map) {
+        Bot nearestEnemyBot = null;
+        double shortestPath = Double.POSITIVE_INFINITY;
+        for (Bot bot : getBots()) {
+            if (bot.getOwner().equals(getOpponent(game))) {
+                if (map.shortestPathWeight(getMyLocation(), bot.getLocation()) <= shortestPath) {
+                    shortestPath = map.shortestPathWeight
+                            (getMyLocation(), bot.getLocation());
+                    nearestEnemyBot = bot;
+                    System.out.println("Actual Shortest Path Weight: " + shortestPath +
+                            "Bot: " + bot.getAlgorithm());
+                }
+            }
         }
-        return iterator.hasNext() ? iterator.next() : verticesList.get(0);
+        return nearestEnemyBot != null ? nearestEnemyBot.getLocation() : getOpponentFlag().getLocation();
     }
     Player getOpponent(Game game) {
         if (game.getRound() % 2 == 0)
@@ -129,11 +118,8 @@ public class RandomPath implements IAlgorithm {
     }
     @Override
     public String toString() {
-        return "\nThis Algorithm don´t follow a particular set of rules. " +
-                "\nThe bot will randomly move in the map, without the intention to achieve the flag." +
-                "\nThis algorithm can be considered a defense method, since it can block the enemy moves." +
-                " On the other hand, it can also block your moves." +
-                " To Avoid this, try to set this bot as the last one";
+        return "\nThis Algorithm tries to block the closest opponent bot. " +
+                "The bot will pursuit the opponent bot the whole game. " +
+                "The purpose of this bot is not to achieve the flag.";
     }
-
 }

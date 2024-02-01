@@ -1,4 +1,4 @@
-package move_algorithms;
+package algorithms;
 
 import collections.lists.OrderedLinkedList;
 import game.*;
@@ -7,7 +7,7 @@ import structures.NetworkEnhance;
 
 import java.util.Iterator;
 
-public class ShortestPath implements IAlgorithm {
+public class BlockEnemyShortestPath implements IAlgorithm {
     private NetworkEnhance<Location> map;
     private OrderedLinkedList<Bot> bots;
     private Flag opponentFlag;
@@ -63,14 +63,11 @@ public class ShortestPath implements IAlgorithm {
         this.game = game;
     }
 
-    public ShortestPath(Game game) {
+    public BlockEnemyShortestPath(Game game) {
         this.map = game.getMap().getGraphMap();
         this.opponentFlag = getOpponent(game).getFlag();
         this.myLocation = getMe(game).getFlag().getLocation();
         this.myFlag = getMe(game).getFlag();
-        for (Bot bot : getMe(game).getListBots()) {
-            this.bots.add(bot);
-        }
         this.game = game;
     }
 
@@ -82,16 +79,16 @@ public class ShortestPath implements IAlgorithm {
         newMap = botInTheWay(getMap());
 
         Iterator<Location> list = newMap.iteratorShortestPath
-                (getMyLocation(),getOpponentFlag().getLocation());
+                (getMyLocation(), getOpponentFlag().getLocation());
         setMyLocation(list.next());
 
         double shortestPathWeight = newMap.shortestPathWeight
-                (getMyLocation(), getOpponentFlag().getLocation());
-        System.out.println("Actual Shortest Path Weight: " + shortestPathWeight);
+                (getOpponentFlag().getLocation(), getMyLocation());
+        System.out.println("Actual opponent shortest path weight: " + shortestPathWeight);
 
         return getMyLocation();
     }
-
+    @Override
     public NetworkEnhance<Location> botInTheWay(NetworkEnhance<Location> map) {
         Iterator<Location> list = map.iteratorShortestPath
                 (myLocation, opponentFlag.getLocation());
@@ -123,11 +120,4 @@ public class ShortestPath implements IAlgorithm {
             return game.getPlayer2();
         }
     }
-
-    @Override
-    public String toString() {
-        return "This Algorithm uses the shortest path to the flag. " +
-                "The bot will use the shortest path to the flag and move there.";
-    }
 }
-

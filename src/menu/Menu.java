@@ -52,12 +52,6 @@ public class Menu {
                             ReadInfo.readEdgeDensity());
                     if (ReadInfo.saveMap() == true)
                         FileIO.exportToJSON(maps);
-                    System.out.println("Player1");
-                    Player player1 = ReadInfo.readPlayer();
-                    System.out.println("Player2");
-                    Player player2 = ReadInfo.readPlayer();
-                    IGame game = new Game(map,player1,player2);
-                    game.start((Game) game);
                     break;
                 case 2:
                     maps = FileIO.importFromJson();

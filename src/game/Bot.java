@@ -1,6 +1,6 @@
 package game;
 
-import move_algorithms.*;
+import algorithms.*;
 import interfaces.IAlgorithm;
 import interfaces.IBot;
 import menu.Tools;
@@ -17,7 +17,8 @@ public class Bot implements IBot {
     public Bot(Game game, IAlgorithm algorithm) throws IOException {
         this.id = nextId++;
         this.owner = getMe(game);
-        this.algorithm = algorithm;}
+        this.algorithm = algorithm;
+    }
 
     public Player getOwner() {
         return owner;
