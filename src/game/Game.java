@@ -1,12 +1,15 @@
 package game;
 
+import algorithms.*;
+import interfaces.IAlgorithm;
 import interfaces.IGame;
+import menu.Display;
 import menu.ReadInfo;
 import menu.Tools;
 
-
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 
 
@@ -36,53 +39,74 @@ public class Game implements IGame {
     @Override
     public void start(Game game) throws IOException {
         setupPlayers();
+        //abrir ciclo para rounds enquanto não chegar à vitória
 
 
     }
 
     public void round(Game game) {
-
+        //joga o primeiro
+        //joga o segundo
         round++;
     }
 
-    private void addBots(Game game) throws IOException {
+    private void addBots(Game game, Player player) throws IOException {
         boolean addingBots = true;
         while (addingBots) {
-            addBot(game, game.player1);
-            addBot(game, game.player2);
+            whatBot(game, player);
             System.out.println("Want to add another bot?");
             if (!Tools.getTrue())
                 addingBots = false;
         }
     }
 
-    private void addBot(Game game, Player player) throws IOException {
-        boolean canAddBot;
-        do {
-            canAddBot = whatBot(game, player);
-        } while (canAddBot);
+    private void whatBot(Game game, Player player) throws IOException {
+        Display.displayAlgorithm();
+        switch (Tools.GetInt()) {
+            case 1:
+                IAlgorithm algorithm1 = new ShortestPath(game);
+                if (botCheckIfPossible(algorithm1, player))
+                    player.getBots().add(new Bot(game, algorithm1));
+                break;
+            case 2:
+                IAlgorithm algorithm2 = new BlockEnemyShortestPath(game);
+                if (botCheckIfPossible(algorithm2, player))
+                    player.getBots().add(new Bot(game, algorithm2));
+                break;
+            case 3:
+                IAlgorithm algorithm3 = new BlockClosestEnemyBot(game);
+                if (botCheckIfPossible(algorithm3, player))
+                    player.getBots().add(new Bot(game, algorithm3));
+                break;
+            case 4:
+                IAlgorithm algorithm4 = new RandomPath(game);
+                if (botCheckIfPossible(algorithm4, player))
+                    player.getBots().add(new Bot(game, algorithm4));
+                break;
+            case 5:
+                IAlgorithm algorithm5 = new MinimumSpanningTreePath(game);
+                if (botCheckIfPossible(algorithm5, player))
+                    player.getBots().add(new Bot(game, algorithm5));
+                break;
+        }
     }
 
-    private boolean whatBot(Game game, Player player) throws IOException {
+    private boolean botCheckIfPossible(IAlgorithm algorithm, Player player) {
         int algorithmCanAppear = numberOfUsedAlgorithms(player) / 5; //number of algorithms i created;
         int occurrences = 0;
-        System.out.println("\nWhat Type of Bot you want to add?");
-        System.out.println(
-                        "\n\t1. Shortest Path" +
-                        "\n\t2. Block Enemy Shortest Path" +
-                        "\n\t3. Block Closest Enemy" +
-                        "\n\t4. Random Path" +
-                        "\n\t5. Minimum Spanning Tree Path");
 
+        Iterator<Bot> bots = player.getBots().iterator();
 
-        occurrences++;
-
-        if (occurrences > algorithmCanAppear)
+        while (bots.hasNext()) {
+            if (bots.next().getAlgorithm().equals(algorithm))
+                occurrences++;
+        }
+        if (occurrences > algorithmCanAppear) {
+            System.out.println("Maximum number for this algorithm has been reached");
             return false;
-
+        }
 
         return true;
-
     }
 
     private int numberOfUsedAlgorithms(Player player) {
@@ -93,6 +117,7 @@ public class Game implements IGame {
 
     /**
      * Set the flag of the player in our base of the map
+     *
      * @param player
      */
     public void setPlayerFlagInMap(Player player) {
@@ -103,8 +128,8 @@ public class Game implements IGame {
         System.out.println(Arrays.toString(map.getGraphMap().getVertices()));
         System.out.println("Choose a location for your flag");
         // Acho que é preciso associar ao mapa quando inseres as coordenadas ou então não e estou a fazer confusão
-        player.getFlag().getLocation().setPosX(xCoordinate);
-        player.getFlag().getLocation().setPosY(yCoordinate);
+        player.getBase().getLocation().setPosX(xCoordinate);
+        player.getBase().getLocation().setPosY(yCoordinate);
         System.out.println(player.getName() + "'s flag was set at the following location X:" + xCoordinate + " Y:"
                 + yCoordinate);
 

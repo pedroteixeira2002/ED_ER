@@ -87,7 +87,39 @@ ________________________________________________________________________________
 
 
 
+`
+1.
+- Gerar mapa
+- Importar mapa
+- Exportar mapa
 
+2.
+-Ambos jogadores definem localização das bandeiras que correspondem à base do jogador.
+
+3.
+- Jogadores acordam e estipulam nº de bots. O número de bots pode ser distinto para cada jogador.
+
+4.
+- Os jogadores devem atribuir um algoritmo para cada bot.
+- Os algoritmos atribuídos irão influenciar a estratégia de cada bot para capturar(caçar) a bandeira inimiga e voltar com bandeira para a sua base.
+
+5.
+- Deve ser decidido aleatóriamente quem começa o jogo.
+- No início de cada partida os bots devem estar localizados na mesma posição que a bandeira do seu jogador.
+
+6.
+- A cada ronda, alternando pelos jogadores só um bot pode movimentar-se.
+- Cada bot não pode avançar jogar duas seguidas quer seja na mesma ronda ou na ronda a seguir. e.g., num jogo com 3 bots, joga o bot 1, depois o 2, seguindo
+do 3. Na quarta ronda, deve voltar ao bot 1.
+
+7.
+- Todas as localizações podem acolher mais que 1 bot.
+- Se um bot entrar numa localização e o bot adversário possuir a sua bandeira, esta(a bandeira) deve voltar para a sua base.
+- Caso contrário o bot se entrar numa localização vazia permanece com a sua bandeira.
+- Se os dois bots entrarem na mesma localização com a bandeira em sua posse respetivamente, ambas voltam para a base.
+
+8.
+- O jogo termina quando a bandeira de um jogador chega à base da equipa adversária.
 
 
 

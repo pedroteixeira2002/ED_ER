@@ -2,12 +2,11 @@ package algorithms;
 
 import collections.lists.OrderedLinkedList;
 import game.*;
-import interfaces.IAlgorithm;
 import structures.NetworkEnhance;
 
 import java.util.Iterator;
 
-public class BlockEnemyShortestPath implements IAlgorithm {
+public class BlockEnemyShortestPath {
     private NetworkEnhance<Location> map;
     private OrderedLinkedList<Bot> bots;
     private Flag opponentFlag;
@@ -65,13 +64,12 @@ public class BlockEnemyShortestPath implements IAlgorithm {
 
     public BlockEnemyShortestPath(Game game) {
         this.map = game.getMap().getGraphMap();
-        this.opponentFlag = getOpponent(game).getFlag();
-        this.myLocation = getMe(game).getFlag().getLocation();
-        this.myFlag = getMe(game).getFlag();
+        this.opponentFlag = getOpponent(game).getBase();
+        this.myLocation = getMe(game).getBase().getLocation();
+        this.myFlag = getMe(game).getBase();
         this.game = game;
     }
 
-    @Override
     public Location move(Game game) {
 
         NetworkEnhance<Location> newMap;
@@ -88,7 +86,6 @@ public class BlockEnemyShortestPath implements IAlgorithm {
 
         return getMyLocation();
     }
-    @Override
     public NetworkEnhance<Location> botInTheWay(NetworkEnhance<Location> map) {
         Iterator<Location> list = map.iteratorShortestPath
                 (myLocation, opponentFlag.getLocation());

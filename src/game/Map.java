@@ -103,6 +103,7 @@ public class Map implements IMap, Comparable<Map> {
      */
     private boolean isConnected() {
         Iterator<Location> iterator = graphMap.iteratorBFS(graphMap.getVertex(0));
+
         int count = 0;
 
         while (iterator.hasNext()) {

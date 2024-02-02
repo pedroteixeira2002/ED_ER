@@ -2,12 +2,14 @@ package algorithms;
 
 import collections.lists.OrderedLinkedList;
 import game.*;
-import interfaces.IAlgorithm;
 import structures.NetworkEnhance;
 
 import java.util.Iterator;
 
-public class ShortestPath implements IAlgorithm {
+import static menu.Tools.getMe;
+import static menu.Tools.getOpponent;
+
+public class ShortestPath {
     private NetworkEnhance<Location> map;
     private OrderedLinkedList<Bot> bots;
     private Flag opponentFlag;
@@ -65,14 +67,13 @@ public class ShortestPath implements IAlgorithm {
 
     public ShortestPath(Game game) {
         this.map = game.getMap().getGraphMap();
-        this.opponentFlag = getOpponent(game).getFlag();
-        this.myLocation = getMe(game).getFlag().getLocation();
-        this.myFlag = getMe(game).getFlag();
+        this.opponentFlag = getOpponent(game).getBase();
+        this.myLocation = getMe(game).getBase().getLocation();
+        this.myFlag = getMe(game).getBase();
         //do bots
         this.game = game;
     }
 
-    @Override
     public Location move(Game game) {
 
         NetworkEnhance<Location> newMap;
@@ -107,19 +108,6 @@ public class ShortestPath implements IAlgorithm {
             } while (list.hasNext());
         }
         return map;
-    }
-    Player getOpponent(Game game) {
-        if (game.getRound() % 2 == 0)
-            return game.getPlayer2();
-        else return game.getPlayer1();
-    }
-
-    Player getMe(Game game) {
-        if (game.getRound() % 2 == 0) {
-            return game.getPlayer1();
-        } else {
-            return game.getPlayer2();
-        }
     }
 
     @Override

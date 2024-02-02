@@ -31,15 +31,18 @@ public class ReadInfo {
         System.out.println("\nEnter the coordinate for X");
         return Tools.readInt();
     }
+
     public static int readCoordinateY() {
         System.out.println("\nEnter the coordinate for Y");
         return Tools.readInt();
     }
+
     public static Player readPlayer() throws IOException {
-        return new Player(readName(),readFlag());
+        return new Player(readName(), readFlag());
     }
-    public static Flag readFlag(){
-        Location location = new Location(readCoordinateX(),readCoordinateY());
+
+    public static Flag readFlag() {
+        Location location = new Location(readCoordinateX(), readCoordinateY());
         return new Flag(location);
 
     }
@@ -53,8 +56,27 @@ public class ReadInfo {
     public static Bot newBot(Game game, IAlgorithm algorithm) throws IOException {
         System.out.println("Add your bot");
         Bot bot = new Bot(game, algorithm);
-
         return bot;
+    }
+
+    public static AlgorithmType chooseAlgorithm() throws IOException {
+        Display.displayAlgorithm();
+        switch (Tools.GetInt()) {
+            case 2:
+                return AlgorithmType.BLOCK_ENEMY_SHORTEST_PATH;
+
+            case 3:
+                return AlgorithmType.BLOCK_CLOSEST_ENEMY_BOT;
+
+            case 4:
+                return AlgorithmType.RANDOM_PATH;
+
+            case 5:
+                return AlgorithmType.MINIMUM_SPANNING_TREE_PATH;
+
+            default:
+                return AlgorithmType.SHORTEST_PATH;
+        }
     }
 
 }

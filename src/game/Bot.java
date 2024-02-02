@@ -3,21 +3,29 @@ package game;
 import algorithms.*;
 import interfaces.IAlgorithm;
 import interfaces.IBot;
+import menu.Display;
 import menu.Tools;
 
 import java.io.IOException;
 
+import static menu.Tools.getMe;
+
 public class Bot implements IBot {
     private static int nextId = 0;
     private int id;
-    private IAlgorithm algorithm;
+    private Algorithm algorithm;
     private Location location;
     private Player owner;
 
-    public Bot(Game game, IAlgorithm algorithm) throws IOException {
+    public Bot(Game game, Algorithm algorithm) throws IOException {
         this.id = nextId++;
         this.owner = getMe(game);
         this.algorithm = algorithm;
+    }
+    public Bot(){
+        this.id = nextId++;
+        this.owner= new Player();
+        this.algorithm = new Algorithm();
     }
 
     public Player getOwner() {
@@ -36,31 +44,44 @@ public class Bot implements IBot {
         this.location = location;
     }
 
-    public IAlgorithm getAlgorithm() {
+    public Algorithm getAlgorithm() {
         return algorithm;
     }
-
-
-    public IAlgorithm setAlgorithm(Game game) throws IOException {
+    public void setAlgorithm(Algorithm algorithm) {
+        this.algorithm = algorithm;
+    }
+/*
+    private void whatBot(Player player) throws IOException {
+        Display.displayAlgorithm();
         switch (Tools.GetInt()) {
             case 1:
-                return algorithm = new RandomPath(game);
+                IAlgorithm algorithm1 = new ShortestPath();
+                if (botCheckIfPossible(algorithm1, player))
+                    player.getBots().add(new Bot( algorithm1));
+                break;
             case 2:
-                return algorithm = new BlockEnemyShortestPath(game);
+                IAlgorithm algorithm2 = new BlockEnemyShortestPath(game);
+                if (botCheckIfPossible(algorithm2, player))
+                    player.getBots().add(new Bot(game, algorithm2));
+                break;
             case 3:
-                return algorithm = new BlockClosestEnemyBot(game);
-            default:
-                return algorithm = new ShortestPath(game);
+                IAlgorithm algorithm3 = new BlockClosestEnemyBot();
+                if (botCheckIfPossible(algorithm3))
+                    player.getBots().add(new Bot(algorithm3));
+                break;
+            case 4:
+                IAlgorithm algorithm4 = new RandomPath();
+                if (botCheckIfPossible(algorithm4))
+                    player.getBots().add(new Bot(algorithm4));
+                break;
+            case 5:
+                IAlgorithm algorithm5 = new MinimumSpanningTreePath();
+                if (botCheckIfPossible(algorithm5))
+                    player.getBots().add(new Bot(algorithm5));
+                break;
         }
-    }
+    }*/
 
-    private Player getMe(Game game) {
-        if (game.getRound() % 2 == 0) {
-            return game.getPlayer1();
-        } else {
-            return game.getPlayer2();
-        }
-    }
     @Override
     public String toString() {
         return "\nBot:" +

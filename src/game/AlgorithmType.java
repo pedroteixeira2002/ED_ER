@@ -1,0 +1,9 @@
+package game;
+
+public enum AlgorithmType {
+    SHORTEST_PATH,
+    BLOCK_ENEMY_SHORTEST_PATH,
+    RANDOM_PATH,
+    MINIMUM_SPANNING_TREE_PATH,
+    BLOCK_CLOSEST_ENEMY_BOT
+}

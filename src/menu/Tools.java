@@ -1,5 +1,8 @@
 package menu;
 
+import game.Game;
+import game.Player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -84,9 +87,24 @@ public class Tools {
         return option == 1;
     }
 
+    public static Player getOpponent(Game game) {
+        if (game.getRound() % 2 == 0)
+            return game.getPlayer2();
+        else return game.getPlayer1();
+    }
+
+    public static Player getMe(Game game) {
+        if (game.getRound() % 2 == 0) {
+            return game.getPlayer1();
+        } else {
+            return game.getPlayer2();
+        }
+    }
+
     public static double getDouble() throws IOException {
         String aux = GetString();
         return Double.parseDouble(aux);
     }
+
 
 }

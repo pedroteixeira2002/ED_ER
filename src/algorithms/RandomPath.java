@@ -2,7 +2,6 @@ package algorithms;
 
 import collections.lists.OrderedLinkedList;
 import game.*;
-import interfaces.IAlgorithm;
 import structures.NetworkEnhance;
 
 import java.util.Arrays;
@@ -10,7 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class RandomPath implements IAlgorithm {
+import static menu.Tools.getMe;
+import static menu.Tools.getOpponent;
+
+public class RandomPath{
     private NetworkEnhance<Location> map;
     private OrderedLinkedList<Bot> bots;
     private Flag opponentFlag;
@@ -20,9 +22,9 @@ public class RandomPath implements IAlgorithm {
 
     public RandomPath(Game game) {
         this.map = game.getMap().getGraphMap();
-        this.opponentFlag = getOpponent(game).getFlag();
-        this.myLocation = getMe(game).getFlag().getLocation();
-        this.myFlag = getMe(game).getFlag();
+        this.opponentFlag = getOpponent(game).getBase();
+        this.myLocation = getMe(game).getBase().getLocation();
+        this.myFlag = getMe(game).getBase();
         this.game = game;
     }
 
@@ -74,7 +76,6 @@ public class RandomPath implements IAlgorithm {
         this.game = game;
     }
 
-    @Override
     public Location move(Game game) {
 
         NetworkEnhance<Location> newMap;
@@ -89,11 +90,6 @@ public class RandomPath implements IAlgorithm {
         }
 
         return getMyLocation();
-    }
-
-    @Override
-    public NetworkEnhance<Location> botInTheWay(NetworkEnhance<Location> map) {
-        return null;
     }
 
     private Location randomLocation(NetworkEnhance<Location> map) {
@@ -113,19 +109,6 @@ public class RandomPath implements IAlgorithm {
             iterator.next();
         }
         return iterator.hasNext() ? iterator.next() : verticesList.get(0);
-    }
-    Player getOpponent(Game game) {
-        if (game.getRound() % 2 == 0)
-            return game.getPlayer2();
-        else return game.getPlayer1();
-    }
-
-    Player getMe(Game game) {
-        if (game.getRound() % 2 == 0) {
-            return game.getPlayer1();
-        } else {
-            return game.getPlayer2();
-        }
     }
     @Override
     public String toString() {
