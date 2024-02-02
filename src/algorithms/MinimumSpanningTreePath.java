@@ -1,18 +1,31 @@
 package algorithms;
 
-import game.Game;
 import game.Location;
-import interfaces.IAlgorithm;
+import game.Map;
 import structures.NetworkEnhance;
 
-public class MinimumSpanningTreePath implements IAlgorithm {
-    @Override
-    public Location move(Game game) {
-        return null;
+import java.util.Iterator;
+
+
+public class MinimumSpanningTreePath {
+    private NetworkEnhance<Location> graph;
+    private Map map;
+
+    public MinimumSpanningTreePath(NetworkEnhance<Location> graph) {
+        this.graph = map.getGraphMap(); ;
     }
 
-    @Override
-    public NetworkEnhance<Location> botInTheWay(NetworkEnhance<Location> map) {
-        return null;
+    public NetworkEnhance<Location> getGraph() {
+        return graph;
     }
+
+    public void setGraph(NetworkEnhance<Location> graph) {
+        this.graph = graph;
+    }
+
+    public Iterator<Location> iteratorMST() {
+        NetworkEnhance<Location> mstNetwork = (NetworkEnhance<Location>) graph.mstNetwork();
+        return mstNetwork.iteratorDFS(mstNetwork.getVertex(0));
+    }
+
 }
