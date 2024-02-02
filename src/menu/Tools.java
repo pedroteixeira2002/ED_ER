@@ -95,9 +95,9 @@ public abstract class Tools {
 
     public static Player getMe(Game game) {
         if (game.getRound() % 2 == 0) {
-            return game.getPlayer1();
+            return game.getPlayers().head.getElement();
         } else {
-            return game.getPlayer2();
+            return game.getPlayers().tail.getElement();
         }
     }
 

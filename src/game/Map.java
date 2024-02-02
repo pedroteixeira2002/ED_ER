@@ -140,21 +140,6 @@ public class Map implements IMap, Comparable<Map> {
         return this.graphMap.getVertex(randomIndex);
     }
 
-    /**
-     * Print the map
-     */
-    public void printMap() {
-        System.out.println("Map ID: " + this.id + "\n");
-        for(int i = 0; i < this.graphMap.size(); i++) {
-            for(int j = 0; j < this.graphMap.size(); j++) {
-                if(this.graphMap.edgeExists(this.graphMap.getVertex(i), this.graphMap.getVertex(j))) {
-                    double weight = this.graphMap.getEdgeWeight(this.graphMap.getVertex(i), this.graphMap.getVertex(j));
-                    System.out.println("Aresta entre " + this.graphMap.getVertex(i) + " e " + this.graphMap.getVertex(j) + " com peso " + weight);
-                }
-            }
-        }
-    }
-
     @Override
     public String toString() {
         String str = "\nMap Id: " + this.id + ":\n";

@@ -94,6 +94,7 @@ public class Algorithm implements IAlgorithm {
     }
 
     public Location tryCatchEnemyFlag(Bot bot, Game game) {
+
     }
 
     public Location minumumSpanningTreePath(Bot bot, Game game) {
@@ -149,4 +150,5 @@ public class Algorithm implements IAlgorithm {
 
         return bots.iterator();
     }
+
 }

@@ -26,6 +26,10 @@ public class Game implements IGame {
         this.round = 1;
     }
 
+    public OrderedLinkedList<Player> getPlayers() {
+        return players;
+    }
+
     public Map getMap() {
         return map;
     }
@@ -44,7 +48,7 @@ public class Game implements IGame {
      */
     @Override
     public void start() throws IOException {
-        while (players.size() <= 2) {
+        while (players.size() <= 1) {
             setupPlayer();
         }
         //abrir ciclo para rounds enquanto não chegar à vitória
@@ -72,7 +76,7 @@ public class Game implements IGame {
                 + xCoordinate + " Y:" + yCoordinate);
         return new Flag(new Location(xCoordinate, yCoordinate));
     }
-
+    
     private String randomizeFirstPlayer(String name1, String name2) {
         Random random = new Random();
         boolean choose = random.nextBoolean();
