@@ -5,7 +5,7 @@ import interfaces.IAlgorithm;
 
 import java.io.IOException;
 
-public class ReadInfo {
+public abstract class ReadInfo {
 
     public static int readQuantityOfLocalizations() throws IOException {
         System.out.println("\nEnter the amount of localizations you want in your map:");

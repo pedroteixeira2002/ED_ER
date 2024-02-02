@@ -13,7 +13,7 @@ import java.io.*;
 import java.util.Iterator;
 
 
-public class FileIO {
+public abstract class FileIO {
     private static final String directory = "src\\database\\maps.json";
 
     /**

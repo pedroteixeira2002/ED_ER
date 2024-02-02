@@ -1,6 +1,6 @@
 package menu;
 
-public class Display {
+public abstract class Display {
     public static String displayMainMenu() {
         return " ____________________________________________________________________\n" +
                 "|                                Menu                               |\n" +

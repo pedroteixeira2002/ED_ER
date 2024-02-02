@@ -6,7 +6,7 @@ public class ListMap {
     /**
      * List of maps
      */
-    private ArrayOrderedList<Map> maps;
+    private final ArrayOrderedList<Map> maps;
 
     public ListMap() {
         this.maps = new ArrayOrderedList<>();
@@ -56,11 +56,14 @@ public class ListMap {
 
     @Override
     public String toString() {
-        String str;
-        str = "List of maps:\n";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("List of maps:\n");
+
         for (Map map : maps) {
-            str += map + "\n";
+            stringBuilder.append(map).append("\n");
         }
-        return str;
+
+        return stringBuilder.toString();
     }
+
 }

@@ -9,7 +9,7 @@ import interfaces.IGame;
 
 import java.io.IOException;
 
-public class Menu {
+public abstract class Menu {
 
     public static void MainMenu() throws IOException {
         boolean isRunning = true;

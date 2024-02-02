@@ -11,7 +11,7 @@ import static menu.Display.displayAlgorithm;
 
 public class Player implements IPlayer {
     private String name;
-    private ArrayOrderedList<Bot> bots;
+    private final ArrayOrderedList<Bot> bots;
     private Flag base;
     private Flag flag;
 
@@ -22,7 +22,7 @@ public class Player implements IPlayer {
     }
 
     public Player() {
-        this.name = new String();
+        this.name = null;
         this.bots = new ArrayOrderedList<>();
         this.base = new Flag(null);
         this.flag = this.base;

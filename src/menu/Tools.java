@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-public class Tools {
+public abstract class Tools {
 
     /**
      * This method returns a string that is read from the keyboard.

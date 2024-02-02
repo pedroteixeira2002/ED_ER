@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class Game implements IGame {
     private Map map;
-    private OrderedLinkedList<Player> players;
+    private final OrderedLinkedList<Player> players;
     private int round;
 
     public Game(Map map) {

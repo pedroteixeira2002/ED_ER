@@ -12,10 +12,10 @@ import static menu.Tools.getMe;
 
 public class Bot implements IBot {
     private static int nextId = 0;
-    private int id;
+    private final int id;
     private Algorithm algorithm;
     private Location location;
-    private Player owner;
+    private final Player owner;
 
     public Bot(Game game, Algorithm algorithm) throws IOException {
         this.id = nextId++;
