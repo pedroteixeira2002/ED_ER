@@ -50,37 +50,6 @@ public class Bot implements IBot {
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = algorithm;
     }
-/*
-    private void whatBot(Player player) throws IOException {
-        Display.displayAlgorithm();
-        switch (Tools.GetInt()) {
-            case 1:
-                IAlgorithm algorithm1 = new ShortestPath();
-                if (botCheckIfPossible(algorithm1, player))
-                    player.getBots().add(new Bot( algorithm1));
-                break;
-            case 2:
-                IAlgorithm algorithm2 = new BlockEnemyShortestPath(game);
-                if (botCheckIfPossible(algorithm2, player))
-                    player.getBots().add(new Bot(game, algorithm2));
-                break;
-            case 3:
-                IAlgorithm algorithm3 = new BlockClosestEnemyBot();
-                if (botCheckIfPossible(algorithm3))
-                    player.getBots().add(new Bot(algorithm3));
-                break;
-            case 4:
-                IAlgorithm algorithm4 = new RandomPath();
-                if (botCheckIfPossible(algorithm4))
-                    player.getBots().add(new Bot(algorithm4));
-                break;
-            case 5:
-                IAlgorithm algorithm5 = new MinimumSpanningTreePath();
-                if (botCheckIfPossible(algorithm5))
-                    player.getBots().add(new Bot(algorithm5));
-                break;
-        }
-    }*/
 
     @Override
     public String toString() {

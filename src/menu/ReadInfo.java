@@ -53,7 +53,7 @@ public class ReadInfo {
     }
 
 
-    public static Bot newBot(Game game, IAlgorithm algorithm) throws IOException {
+    public static Bot newBot(Game game, Algorithm algorithm) throws IOException {
         System.out.println("Add your bot");
         Bot bot = new Bot(game, algorithm);
         return bot;
@@ -63,15 +63,12 @@ public class ReadInfo {
         Display.displayAlgorithm();
         switch (Tools.GetInt()) {
             case 2:
-                return AlgorithmType.BLOCK_ENEMY_SHORTEST_PATH;
+                return AlgorithmType.TRY_CATCH_ENEMY_PATH;
 
             case 3:
-                return AlgorithmType.BLOCK_CLOSEST_ENEMY_BOT;
-
-            case 4:
                 return AlgorithmType.RANDOM_PATH;
 
-            case 5:
+            case 4:
                 return AlgorithmType.MINIMUM_SPANNING_TREE_PATH;
 
             default:

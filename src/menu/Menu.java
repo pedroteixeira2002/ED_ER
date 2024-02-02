@@ -50,7 +50,7 @@ public class Menu {
                     map.generateMap(ReadInfo.readQuantityOfLocalizations(),
                             ReadInfo.readIfIsDirectional(),
                             ReadInfo.readEdgeDensity());
-                    if (ReadInfo.saveMap() == true)
+                    if (ReadInfo.saveMap())
                         FileIO.exportToJSON(maps);
                     break;
                 case 2:
@@ -59,6 +59,7 @@ public class Menu {
                     break;
                 case 0:
                     isRunning = false;
+                    break;
                 default:
                     isRunning = true;
             }

@@ -13,6 +13,7 @@ public class Player implements IPlayer {
     private String name;
     private ArrayOrderedList<Bot> bots;
     private Flag base;
+    private Flag flag;
 
     public Player(String name, Flag base) {
         this.name = name;
@@ -24,6 +25,11 @@ public class Player implements IPlayer {
         this.name = new String();
         this.bots = new ArrayOrderedList<>();
         this.base = new Flag(null);
+        this.flag = this.base;
+    }
+
+    public Flag getFlag() {
+        return flag;
     }
 
     public ArrayOrderedList<Bot> getBots() {
@@ -68,18 +74,14 @@ public class Player implements IPlayer {
                     algorithm.setType(AlgorithmType.SHORTEST_PATH);
                 return algorithm;
             case 2:
-                if (botCheckIfPossible(AlgorithmType.BLOCK_ENEMY_SHORTEST_PATH))
-                    algorithm.setType(AlgorithmType.BLOCK_ENEMY_SHORTEST_PATH);
+                if (botCheckIfPossible(AlgorithmType.TRY_CATCH_ENEMY_PATH))
+                    algorithm.setType(AlgorithmType.TRY_CATCH_ENEMY_PATH);
                 return algorithm;
             case 3:
-                if (botCheckIfPossible(AlgorithmType.BLOCK_CLOSEST_ENEMY_BOT))
-                    algorithm.setType(AlgorithmType.BLOCK_CLOSEST_ENEMY_BOT);
-                return algorithm;
-            case 4:
                 if (botCheckIfPossible(AlgorithmType.RANDOM_PATH))
                     algorithm.setType(AlgorithmType.RANDOM_PATH);
                 return algorithm;
-            case 5:
+            case 4:
                 if (botCheckIfPossible(AlgorithmType.MINIMUM_SPANNING_TREE_PATH))
                     algorithm.setType(AlgorithmType.MINIMUM_SPANNING_TREE_PATH);
                 return algorithm;
@@ -100,14 +102,11 @@ public class Player implements IPlayer {
             System.out.println("Maximum number for this algorithm has been reached");
             return false;
         }
-
         return true;
     }
 
     private int numberOfUsedAlgorithms() {
-        if (getBots().size() > 5)
-            return getBots().size()/5;
-        else return 1;
+        return getBots().size() / 5;
     }
 
 }
