@@ -79,11 +79,21 @@ public class Game implements IGame {
         System.out.println("Available locations: ");
         System.out.println(Arrays.toString(map.getGraphMap().getVertices()));
 
+        System.out.println("Choose a location for your flag");
         int xCoordinate = ReadInfo.readCoordinateX();
         int yCoordinate = ReadInfo.readCoordinateY();
 
 
-        System.out.println("Choose a location for your flag");
+        Iterator<Player> playersIterator = players.iterator();
+        while (playersIterator.hasNext()) {
+            if (playersIterator.next().getBase().equals(new Location(xCoordinate, yCoordinate))) {
+                System.out.println("This location is already taken, choose another one:");
+                xCoordinate = ReadInfo.readCoordinateX();
+                yCoordinate = ReadInfo.readCoordinateY();
+            }
+        }
+
+
         System.out.println("Flag was set at the following location X:"
                 + xCoordinate + " Y:" + yCoordinate);
         return new Flag(new Location(xCoordinate, yCoordinate));
@@ -93,21 +103,20 @@ public class Game implements IGame {
         Random random = new Random();
         boolean choose = random.nextBoolean();
         String first = choose ? name1 : name2;
-        System.out.println("The first Player will be " + first);
+        System.out.println("The first Player will be " + first + ".");
         return first;
     }
 
     /**
-     * Setup Players for the game, randomizes which is Player 1 and player 2
-     *
+     * Setup Players for the game, randomizes which is Player 1 and player 2.
      * @throws IOException
      */
     private void setupPlayer() throws IOException {
             System.out.println("\nEnter the players names");
-            System.out.println("\nFirst");
+            System.out.print("\nFirst name:");
             String name1 = Tools.GetString();
 
-            System.out.println("\nSecond");
+            System.out.print("\nSecond name:");
             String name2 = Tools.GetString();
 
             Player player1 = new Player(randomizeFirstPlayer(name1, name2), setPlayerBaseInMap());
@@ -142,5 +151,14 @@ public class Game implements IGame {
             }
         }
         return null;
+    }
+
+    /**
+     * Add a player to the game's player list.
+     */
+    public void addPlayer() throws IOException {
+        System.out.println("Enter the player name");
+        String name = Tools.GetString();
+        players.addToRear(new Player(name, setPlayerBaseInMap()));
     }
 }

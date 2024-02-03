@@ -2,13 +2,13 @@ package game;
 
 import collections.lists.arrayLists.ArrayOrderedList;
 
-public class ListMap {
+public class MapList {
     /**
      * List of maps
      */
     private final ArrayOrderedList<Map> maps;
 
-    public ListMap() {
+    public MapList() {
         this.maps = new ArrayOrderedList<>();
     }
 

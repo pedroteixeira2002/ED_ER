@@ -1,8 +1,3 @@
-import datapersistence.FileIO;
-import game.Bot;
-import game.Game;
-import game.ListMap;
-import game.Map;
 import menu.Menu;
 
 import java.io.IOException;

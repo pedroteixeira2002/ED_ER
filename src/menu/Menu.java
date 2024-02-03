@@ -2,14 +2,14 @@ package menu;
 
 import datapersistence.FileIO;
 import game.Game;
-import game.ListMap;
 import game.Map;
-import game.Player;
-import interfaces.IGame;
+import game.MapList;
 
 import java.io.IOException;
 
+import static menu.Display.displayGameRules;
 import static menu.Tools.GetInt;
+
 
 public abstract class Menu {
 
@@ -18,12 +18,15 @@ public abstract class Menu {
 
         while (isRunning) {
 
-            ListMap maps = new ListMap();
-
+            MapList maps = new MapList(); //Verficar propósito depois
+            //Show the main menu
             System.out.println(Display.displayMainMenu());
+            System.out.print("Choose an option: ");
+            int choice = GetInt();
 
-            switch (GetInt()) {
+            switch (choice) {
                 case 1:
+                    System.out.println("Loading game...");
                     GameMenu(maps);
                     break;
                 case 2:
@@ -34,21 +37,39 @@ public abstract class Menu {
                     if (ReadInfo.saveMap())
                         FileIO.exportToJSON(maps);
                     break;
+
+                case 3:
+                    System.out.println(displayGameRules());
+                    break;
                 case 0:
                     isRunning = false;
+                    System.out.println("Goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid option, please choose a valid option.");
                     break;
             }
         }
     }
 
 
-    public static void GameMenu(ListMap maps) throws IOException {
-        System.out.println(Display.displayNewGameMenu());
-        boolean isRunning = true;
+    public static void GameMenu(MapList maps) throws IOException {
         Map map = new Map();
         Game game = new Game(map);
+
+
+        boolean isRunning = true;
+
         while (isRunning) {
-            switch (GetInt()) {
+            //The game will start
+            game.start();
+
+            // Show game menu
+            System.out.println(Display.displayNewGameMenu());
+            System.out.print("Choose an option: ");
+            int choice = GetInt();
+
+            switch (choice) {
                 case 1:
                     map.generateMap(ReadInfo.readQuantityOfLocalizations(),
                             ReadInfo.readIfIsDirectional(),
@@ -67,7 +88,8 @@ public abstract class Menu {
                     isRunning = false;
                     break;
                 default:
-                    isRunning = true;
+                    System.out.println("Invalid option, please choose a valid option.");
+                    break;
             }
 
         }

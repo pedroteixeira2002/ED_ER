@@ -1,6 +1,6 @@
 package datapersistence;
 
-import game.ListMap;
+import game.MapList;
 import game.Location;
 import game.Map;
 import interfaces.IMap;
@@ -19,7 +19,7 @@ public abstract class FileIO {
     /**
      * Export the map list to a json file
      */
-    public static void exportToJSON(ListMap listTmp) {
+    public static void exportToJSON(MapList listTmp) {
         JSONObject jsonObject = new JSONObject();
 
         try (FileWriter writer = new FileWriter(directory)) {
@@ -57,8 +57,8 @@ public abstract class FileIO {
         }
     }
 
-    public static ListMap importFromJson() {
-        ListMap mapList = new ListMap();
+    public static MapList importFromJson() {
+        MapList mapList = new MapList();
 
         try {
             Reader reader = new FileReader(directory);
