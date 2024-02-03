@@ -9,9 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import static menu.Tools.getMe;
-import static menu.Tools.getOpponent;
-
 public class Algorithm implements IAlgorithm {
     private final Random random;
     private AlgorithmType type;
@@ -46,19 +43,20 @@ public class Algorithm implements IAlgorithm {
 
         //iterador para saber a minha próxima localização
         Iterator<Location> list = game.getMap().getGraphMap().iteratorShortestPath
-                (bot.getLocation(), getOpponent(game).getBase().getLocation());
+                (bot.getLocation(), getOpponent(bot, game).getBase().getLocation());
 
         //atualizar a minha localização
         bot.setLocation(list.next());
 
         //print do peso do caminho mais curto
         double shortestPathWeight = game.getMap().getGraphMap().shortestPathWeight
-                (bot.getLocation(), getOpponent(game).getBase().getLocation());
+                (bot.getLocation(), getOpponent(bot, game).getBase().getLocation());
         System.out.println("Actual Shortest Path Weight: " + shortestPathWeight);
 
 
         flagInTheWay(bot, game);
 
+        checkVictory(bot,game);
         return bot.getLocation();
     }
 
@@ -70,9 +68,11 @@ public class Algorithm implements IAlgorithm {
 
 
         flagInTheWay(bot, game);
-        if (bot.getLocation().equals(getOpponent(game).getBase())) {
-            System.out.println("Winner:" + getMe(game));
+        if (bot.getLocation().equals(getOpponent(bot, game).getBase())) {
+            System.out.println("Winner:" + bot.getOwner());
         }
+        checkVictory(bot,game);
+
         return bot.getLocation();
     }
 
@@ -100,6 +100,7 @@ public class Algorithm implements IAlgorithm {
     public Location minumumSpanningTreePath(Bot bot, Game game) {
 
     }
+
     public Iterator<Location> iteratorMST(Game game) {
         NetworkEnhance<Location> mstNetwork = (NetworkEnhance<Location>) game.getMap().getGraphMap().mstNetwork();
         return mstNetwork.iteratorDFS(mstNetwork.getVertex(0));
@@ -113,19 +114,19 @@ public class Algorithm implements IAlgorithm {
      * @param game
      **/
     public void flagInTheWay(Bot bot, Game game) {
-        Iterator<Bot> bots = allBots(game);
+        Iterator<Bot> bots = allBots(bot, game);
 
         if (bot.getLocation().
-                equals(getOpponent(game).getFlag().getLocation()))//mandar a flag do enimigo para a base
-            getOpponent(game).getFlag().
-                    setLocation(getOpponent(game).getBase().getLocation());
+                equals(getOpponent(bot, game).getFlag().getLocation()))//mandar a flag do enimigo para a base
+            getOpponent(bot, game).getFlag().
+                    setLocation(getOpponent(bot, game).getBase().getLocation());
         if (bot.getLocation().
-                equals(getMe(game).getFlag())) {//se eu tiver a flag
+                equals(bot.getOwner().getFlag())) {//se eu tiver a flag
             while (bots.hasNext()) {
                 if (bots.next().getLocation().
                         equals(bot.getLocation())) {//itera por todos os bots no mape se alguma das suas localizações for igual à minha
-                    getMe(game).getFlag().
-                            setLocation(getMe(game).getBase().getLocation());//envia a minha flag par a minha base
+                    bot.getOwner().getFlag().
+                            setLocation(bot.getOwner().getBase().getLocation());//envia a minha flag par a minha base
                 }
             }
         }
@@ -135,11 +136,11 @@ public class Algorithm implements IAlgorithm {
      * @param game
      * @return an iterator with all the bots playing
      */
-    private Iterator<Bot> allBots(Game game) {
+    private Iterator<Bot> allBots(Bot bot, Game game) {
         ArrayOrderedList<Bot> bots = new ArrayOrderedList<>();
 
-        Iterator<Bot> myBots = getMe(game).getBots().iterator();
-        Iterator<Bot> enemyBots = getOpponent(game).getBots().iterator();
+        Iterator<Bot> myBots = bot.getOwner().getBots().iterator();
+        Iterator<Bot> enemyBots = getOpponent(bot, game).getBots().iterator();
 
         while (myBots.hasNext()) {
             bots.add(myBots.next());
@@ -150,5 +151,20 @@ public class Algorithm implements IAlgorithm {
 
         return bots.iterator();
     }
+    private void checkVictory(Bot bot, Game game){
+        if (bot.getLocation().equals(getOpponent(bot,game).getBase())){
+            System.out.println(bot.getOwner().getName() + "is the Winner!");
+            bot.setLocation(new Location(1000,1000));
+        }
+    }
 
+    private Player getOpponent(Bot bot, Game game) {
+        Iterator<Player> players = game.getPlayers().iterator();
+        while (players.hasNext()) {
+            Player currentPlayer = players.next();
+            if (!bot.getOwner().getName().equals(currentPlayer.getName()))
+                return currentPlayer;
+        }
+        return null;
+    }
 }

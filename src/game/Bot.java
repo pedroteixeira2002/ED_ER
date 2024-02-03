@@ -1,14 +1,8 @@
 package game;
 
-import algorithms.*;
-import interfaces.IAlgorithm;
 import interfaces.IBot;
-import menu.Display;
-import menu.Tools;
 
 import java.io.IOException;
-
-import static menu.Tools.getMe;
 
 public class Bot implements IBot {
     private static int nextId = 0;
@@ -17,14 +11,15 @@ public class Bot implements IBot {
     private Location location;
     private final Player owner;
 
-    public Bot(Game game, Algorithm algorithm) throws IOException {
+    public Bot(Player owner, Algorithm algorithm) {
         this.id = nextId++;
-        this.owner = getMe(game);
+        this.owner = owner;
         this.algorithm = algorithm;
     }
-    public Bot(){
+
+    public Bot() {
         this.id = nextId++;
-        this.owner= new Player();
+        this.owner = new Player();
         this.algorithm = new Algorithm();
     }
 
@@ -47,6 +42,7 @@ public class Bot implements IBot {
     public Algorithm getAlgorithm() {
         return algorithm;
     }
+
     public void setAlgorithm(Algorithm algorithm) {
         this.algorithm = algorithm;
     }

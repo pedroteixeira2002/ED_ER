@@ -52,7 +52,7 @@ public class Player implements IPlayer {
         this.base = base;
     }
 
-    private void addBots() throws IOException {
+    public void addBots() throws IOException {
         boolean addingBots = true;
 
         while (addingBots) {

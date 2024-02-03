@@ -7,6 +7,7 @@ import menu.Tools;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 
 public class Game implements IGame {
@@ -48,16 +49,19 @@ public class Game implements IGame {
      */
     @Override
     public void start() throws IOException {
-        while (players.size() <= 1) {
-            setupPlayer();
-        }
-        //abrir ciclo para rounds enquanto não chegar à vitória
+        //setup players
+        setupPlayer();
+        //setup bots
+        setupBots();
+        //round
+        round();
     }
 
-    public void round() {
-        //joga o primeiro
-        //joga o segundo
-        round++;
+    private void round() {
+        while (checkVictory() != null){
+
+        }
+            round++;
     }
 
 
@@ -76,7 +80,7 @@ public class Game implements IGame {
                 + xCoordinate + " Y:" + yCoordinate);
         return new Flag(new Location(xCoordinate, yCoordinate));
     }
-    
+
     private String randomizeFirstPlayer(String name1, String name2) {
         Random random = new Random();
         boolean choose = random.nextBoolean();
@@ -86,20 +90,47 @@ public class Game implements IGame {
     }
 
     /**
-     *Setup Players for the game, randomizes which is Player 1 and player 2
+     * Setup Players for the game, randomizes which is Player 1 and player 2
+     *
      * @throws IOException
      */
     private void setupPlayer() throws IOException {
-        System.out.println("\nEnter the players names");
-        System.out.println("\nFirst");
-        String name1 = Tools.GetString();
+        while (players.size() <= 1) {
+            System.out.println("\nEnter the players names");
+            System.out.println("\nFirst");
+            String name1 = Tools.GetString();
 
-        System.out.println("\nSecond");
-        String name2 = Tools.GetString();
+            System.out.println("\nSecond");
+            String name2 = Tools.GetString();
 
-        players.add(new Player(randomizeFirstPlayer(name1, name2), setPlayerBaseInMap()));
+            players.add(new Player(randomizeFirstPlayer(name1, name2), setPlayerBaseInMap()));
 
-        if (players.head.getElement().getName().equals(name1))
-            players.add(new Player(name2, setPlayerBaseInMap()));
+            if (players.head.getElement().getName().equals(name1))
+                players.add(new Player(name2, setPlayerBaseInMap()));
+        }
+    }
+
+    private void setupBots() throws IOException {
+        while (players.iterator().hasNext()) {
+            players.iterator().next().addBots();
+        }
+    }
+
+    private Player checkVictory() {
+        Iterator<Player> iPlayers = players.iterator();
+
+        while (iPlayers.hasNext()) {
+
+            Player currentPlayer = iPlayers.next();
+            Iterator<Bot> bots = players.iterator().next().getBots().iterator();
+
+            while (bots.hasNext()) {
+
+                Bot bot = bots.next();
+                if (bot.getLocation().equals(new Location(1000, 1000)))
+                    return currentPlayer;
+            }
+        }
+        return null;
     }
 }

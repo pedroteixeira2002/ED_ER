@@ -87,20 +87,6 @@ public abstract class Tools {
         return option == 1;
     }
 
-    public static Player getOpponent(Game game) {
-        if (game.getRound() % 2 == 0)
-            return game.getPlayer2();
-        else return game.getPlayer1();
-    }
-
-    public static Player getMe(Game game) {
-        if (game.getRound() % 2 == 0) {
-            return game.getPlayers().head.getElement();
-        } else {
-            return game.getPlayers().tail.getElement();
-        }
-    }
-
     public static double getDouble() throws IOException {
         String aux = GetString();
         return Double.parseDouble(aux);
