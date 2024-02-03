@@ -27,21 +27,21 @@ public abstract class ReadInfo {
         return Tools.getTrue();
     }
 
-    public static int readCoordinateX() {
+    public static int readCoordinateX() throws IOException {
         System.out.println("\nEnter the coordinate for X");
-        return Tools.readInt();
+        return Tools.GetInt();
     }
 
-    public static int readCoordinateY() {
+    public static int readCoordinateY() throws IOException {
         System.out.println("\nEnter the coordinate for Y");
-        return Tools.readInt();
+        return Tools.GetInt();
     }
 
     public static Player readPlayer() throws IOException {
         return new Player(readName(), readFlag());
     }
 
-    public static Flag readFlag() {
+    public static Flag readFlag() throws IOException {
         Location location = new Location(readCoordinateX(), readCoordinateY());
         return new Flag(location);
 
@@ -52,12 +52,6 @@ public abstract class ReadInfo {
         return Tools.readString();
     }
 
-
-    public static Bot newBot(Game game, Algorithm algorithm) throws IOException {
-        System.out.println("Add your bot");
-        Bot bot = new Bot(game, algorithm);
-        return bot;
-    }
 
     public static AlgorithmType chooseAlgorithm() throws IOException {
         Display.displayAlgorithm();

@@ -1,6 +1,7 @@
 package game;
 
 import collections.lists.OrderedLinkedList;
+import collections.lists.UnorderedLinkedList;
 import interfaces.IGame;
 import menu.ReadInfo;
 import menu.Tools;
@@ -12,22 +13,22 @@ import java.util.Random;
 
 public class Game implements IGame {
     private Map map;
-    private final OrderedLinkedList<Player> players;
+    private final UnorderedLinkedList<Player> players;
     private int round;
 
     public Game(Map map) {
         this.map = map;
-        this.players = new OrderedLinkedList<>();
+        this.players = new UnorderedLinkedList<>();
         this.round = 1;
     }
 
     public Game() {
         this.map = new Map();
-        this.players = new OrderedLinkedList<>();
+        this.players = new UnorderedLinkedList<>();
         this.round = 1;
     }
 
-    public OrderedLinkedList<Player> getPlayers() {
+    public UnorderedLinkedList<Player> getPlayers() {
         return players;
     }
 
@@ -58,22 +59,29 @@ public class Game implements IGame {
     }
 
     private void round() {
-        while (checkVictory() != null){
-
+        while (checkVictory() != null) {
+            Iterator<Player> playersIterator = players.iterator();
+            while (playersIterator.hasNext()) {
+                Player currentPlayer = playersIterator.next();
+                Bot bot = currentPlayer.getBotsQueue().dequeue();
+                bot.getAlgorithm().move(bot, this);
+                currentPlayer.getBotsQueue().enqueue(bot);
+            }
         }
-            round++;
+        round++;
     }
 
 
     /**
      * Set the base of the player in the map
      */
-    public Flag setPlayerBaseInMap() {
+    public Flag setPlayerBaseInMap() throws IOException {
+        System.out.println("Available locations: ");
+        System.out.println(Arrays.toString(map.getGraphMap().getVertices()));
+
         int xCoordinate = ReadInfo.readCoordinateX();
         int yCoordinate = ReadInfo.readCoordinateY();
 
-        System.out.println("Available locations: ");
-        System.out.println(Arrays.toString(map.getGraphMap().getVertices()));
 
         System.out.println("Choose a location for your flag");
         System.out.println("Flag was set at the following location X:"
@@ -95,7 +103,6 @@ public class Game implements IGame {
      * @throws IOException
      */
     private void setupPlayer() throws IOException {
-        while (players.size() <= 1) {
             System.out.println("\nEnter the players names");
             System.out.println("\nFirst");
             String name1 = Tools.GetString();
@@ -103,11 +110,14 @@ public class Game implements IGame {
             System.out.println("\nSecond");
             String name2 = Tools.GetString();
 
-            players.add(new Player(randomizeFirstPlayer(name1, name2), setPlayerBaseInMap()));
+            Player player1 = new Player(randomizeFirstPlayer(name1, name2), setPlayerBaseInMap());
 
-            if (players.head.getElement().getName().equals(name1))
-                players.add(new Player(name2, setPlayerBaseInMap()));
-        }
+
+            players.addToRear(player1);
+
+            if (players.head.getElement().getName().equals(name1)) {
+                Player player2 = new Player(name2, setPlayerBaseInMap());
+            }
     }
 
     private void setupBots() throws IOException {

@@ -34,8 +34,8 @@ public class Algorithm implements IAlgorithm {
                 return tryCatchEnemyFlag(bot, game);
             case RANDOM_PATH:
                 return randomPath(bot, game);
-            case MINIMUM_SPANNING_TREE_PATH:
-                return minumumSpanningTreePath(bot, game);
+            /*case MINIMUM_SPANNING_TREE_PATH:
+                return minimumSpanningTreePath(bot, game);*/
         }
     }
 
@@ -66,7 +66,6 @@ public class Algorithm implements IAlgorithm {
 
         bot.setLocation(randomLocation);
 
-
         flagInTheWay(bot, game);
         if (bot.getLocation().equals(getOpponent(bot, game).getBase())) {
             System.out.println("Winner:" + bot.getOwner());
@@ -94,12 +93,22 @@ public class Algorithm implements IAlgorithm {
     }
 
     public Location tryCatchEnemyFlag(Bot bot, Game game) {
+        Player enemy =getOpponent(bot,game);
+        Flag enemyFlag = enemy.getFlag();
+        Iterator<Location> path = game.getMap().getGraphMap().iteratorShortestPath(bot.getLocation(),enemyFlag.getLocation());
 
+        bot.setLocation(path.next());
+
+        flagInTheWay(bot,game);
+
+        checkVictory(bot,game);
+        return bot.getLocation();
     }
 
-    public Location minumumSpanningTreePath(Bot bot, Game game) {
+    /*public Location minimumSpanningTreePath(Bot bot, Game game) {
 
-    }
+
+    }*/
 
     public Iterator<Location> iteratorMST(Game game) {
         NetworkEnhance<Location> mstNetwork = (NetworkEnhance<Location>) game.getMap().getGraphMap().mstNetwork();

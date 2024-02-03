@@ -1,8 +1,5 @@
 package menu;
 
-import game.Game;
-import game.Player;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,11 +28,12 @@ public abstract class Tools {
      *
      * @return The integer that was read from the keyboard.
      */
-    public static int readInt() {
-        int num;
-        Scanner scanner = new Scanner(System.in);
-        num = scanner.nextInt();
-        return num;
+    public static int GetInt() throws IOException {
+
+        String aux = GetString();
+
+        return Integer.parseInt(aux);
+
     }
 
     /**
@@ -59,13 +57,6 @@ public abstract class Tools {
 
     }
 
-    public static int GetInt() throws IOException {
-
-        String aux = GetString();
-
-        return Integer.parseInt(aux);
-
-    }
 
     public static long GetLong() throws IOException {
 
@@ -82,9 +73,11 @@ public abstract class Tools {
         return aux.charAt(0);
 
     }
-    public static boolean getTrue() throws IOException {
-        int option = Tools.GetInt();
-        return option == 1;
+
+    public static boolean getTrue() throws IOException {;
+        if (Tools.GetInt() == 1)
+            return true;
+        return false;
     }
 
     public static double getDouble() throws IOException {

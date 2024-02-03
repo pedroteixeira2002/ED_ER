@@ -9,6 +9,8 @@ import interfaces.IGame;
 
 import java.io.IOException;
 
+import static menu.Tools.GetInt;
+
 public abstract class Menu {
 
     public static void MainMenu() throws IOException {
@@ -20,7 +22,7 @@ public abstract class Menu {
 
             System.out.println(Display.displayMainMenu());
 
-            switch (Tools.GetInt()) {
+            switch (GetInt()) {
                 case 1:
                     GameMenu(maps);
                     break;
@@ -44,18 +46,22 @@ public abstract class Menu {
         System.out.println(Display.displayNewGameMenu());
         boolean isRunning = true;
         Map map = new Map();
+        Game game = new Game(map);
         while (isRunning) {
-            switch (Tools.GetInt()) {
+            switch (GetInt()) {
                 case 1:
                     map.generateMap(ReadInfo.readQuantityOfLocalizations(),
                             ReadInfo.readIfIsDirectional(),
                             ReadInfo.readEdgeDensity());
+                    maps.addMap(map);
                     if (ReadInfo.saveMap())
                         FileIO.exportToJSON(maps);
+                    game.start();
                     break;
                 case 2:
                     maps = FileIO.importFromJson();
                     System.out.println(maps.getAllMaps());
+                    game = new Game(maps.getMapById(GetInt()));
                     break;
                 case 0:
                     isRunning = false;

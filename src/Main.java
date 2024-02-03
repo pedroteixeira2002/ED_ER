@@ -42,6 +42,6 @@ public class Main {
 
         */
 
-        //Menu.MainMenu();
+        Menu.MainMenu();
     }
 }
