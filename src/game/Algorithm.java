@@ -110,6 +110,7 @@ public class Algorithm implements IAlgorithm {
     }
 
     public Location minimumSpanningTreePath(Bot bot, Game game) {
+
         // Iterador que percorre os vértices da MST
         Iterator<Location> list = iteratorMST(game);
 
@@ -118,10 +119,9 @@ public class Algorithm implements IAlgorithm {
 
         flagInTheWay(bot, game);
 
-        checkVictory(bot, game);
+        checkVictory(bot,game);
 
         return bot.getLocation();
-
     }
 
     public Iterator<Location> iteratorMST(Game game) {
