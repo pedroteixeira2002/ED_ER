@@ -34,29 +34,33 @@ public class Algorithm implements IAlgorithm {
                 return tryCatchEnemyFlag(bot, game);
             case RANDOM_PATH:
                 return randomPath(bot, game);
-            /*case MINIMUM_SPANNING_TREE_PATH:
-                return minimumSpanningTreePath(bot, game);*/
+            case MINIMUM_SPANNING_TREE_PATH:
+                return minimumSpanningTreePath(bot, game);
         }
     }
 
     public Location shortestPath(Bot bot, Game game) {
 
-        //iterador para saber a minha próxima localização
-        Iterator<Location> list = game.getMap().getGraphMap().iteratorShortestPath
-                (bot.getLocation(), getOpponent(bot, game).getBase().getLocation());
+        if (bot.hasFlag()) {
+            //iterador para saber a minha próxima localização
+            Iterator<Location> list = game.getMap().getGraphMap().iteratorShortestPath
+                    (bot.getLocation(), getOpponent(bot, game).getBase().getLocation());
 
-        //atualizar a minha localização
-        bot.setLocation(list.next());
+            //atualizar a minha localização
+            bot.setLocation(list.next());
 
-        //print do peso do caminho mais curto
-        double shortestPathWeight = game.getMap().getGraphMap().shortestPathWeight
-                (bot.getLocation(), getOpponent(bot, game).getBase().getLocation());
-        System.out.println("Actual Shortest Path Weight: " + shortestPathWeight);
+            //print do peso do caminho mais curto
+            double shortestPathWeight = game.getMap().getGraphMap().shortestPathWeight
+                    (bot.getLocation(), getOpponent(bot, game).getBase().getLocation());
+            System.out.println("Actual Shortest Path Weight: " + shortestPathWeight);
 
+            flagInTheWay(bot, game);
 
-        flagInTheWay(bot, game);
-
-        checkVictory(bot,game);
+            checkVictory(bot, game);
+        } else {
+            //no caso de ter perdido a flag
+            goGetFlag(bot, game);
+        }
         return bot.getLocation();
     }
 
@@ -70,7 +74,7 @@ public class Algorithm implements IAlgorithm {
         if (bot.getLocation().equals(getOpponent(bot, game).getBase())) {
             System.out.println("Winner:" + bot.getOwner());
         }
-        checkVictory(bot,game);
+        checkVictory(bot, game);
 
         return bot.getLocation();
     }
@@ -93,26 +97,37 @@ public class Algorithm implements IAlgorithm {
     }
 
     public Location tryCatchEnemyFlag(Bot bot, Game game) {
-        Player enemy =getOpponent(bot,game);
+        Player enemy = getOpponent(bot, game);
         Flag enemyFlag = enemy.getFlag();
-        Iterator<Location> path = game.getMap().getGraphMap().iteratorShortestPath(bot.getLocation(),enemyFlag.getLocation());
+        Iterator<Location> path = game.getMap().getGraphMap().iteratorShortestPath(bot.getLocation(), enemyFlag.getLocation());
 
         bot.setLocation(path.next());
 
-        flagInTheWay(bot,game);
+        flagInTheWay(bot, game);
 
-        checkVictory(bot,game);
+        checkVictory(bot, game);
         return bot.getLocation();
     }
 
-    /*public Location minimumSpanningTreePath(Bot bot, Game game) {
+    public Location minimumSpanningTreePath(Bot bot, Game game) {
+        // Iterador que percorre os vértices da MST
+        Iterator<Location> list = iteratorMST(game);
 
+        // Atualizar a localização do bot
+        bot.setLocation(list.next());
 
-    }*/
+        flagInTheWay(bot, game);
+
+        checkVictory(bot, game);
+
+        return bot.getLocation();
+
+    }
 
     public Iterator<Location> iteratorMST(Game game) {
         NetworkEnhance<Location> mstNetwork = (NetworkEnhance<Location>) game.getMap().getGraphMap().mstNetwork();
         return mstNetwork.iteratorDFS(mstNetwork.getVertex(0));
+        //se noa funcionar o erro está aqui, n pode ser zero
     }
 
     /**
@@ -160,10 +175,11 @@ public class Algorithm implements IAlgorithm {
 
         return bots.iterator();
     }
-    private void checkVictory(Bot bot, Game game){
-        if (bot.getLocation().equals(getOpponent(bot,game).getBase())){
+
+    private void checkVictory(Bot bot, Game game) {
+        if (bot.getLocation().equals(getOpponent(bot, game).getBase())) {
             System.out.println(bot.getOwner().getName() + "is the Winner!");
-            bot.setLocation(new Location(1000,1000));
+            bot.setLocation(new Location(1000, 1000));
         }
     }
 
@@ -175,5 +191,25 @@ public class Algorithm implements IAlgorithm {
                 return currentPlayer;
         }
         return null;
+    }
+
+    /**
+     * If the bot loss the flag, he returns to the base to get it back
+     *
+     * @param bot
+     * @param game
+     */
+    public void goGetFlag(Bot bot, Game game) {
+
+        Iterator<Location> list = game.getMap().getGraphMap().iteratorShortestPath
+                (bot.getLocation(), bot.getOwner().getFlag().getLocation());
+
+        //atualizar a minha localização
+        bot.setLocation(list.next());
+
+        flagInTheWay(bot, game);
+
+        checkVictory(bot, game);
+
     }
 }

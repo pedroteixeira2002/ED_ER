@@ -1,7 +1,6 @@
 package structures;
 
 import collections.graphs.Network;
-import game.Location;
 
 
 public class NetworkEnhance<T> extends Network<T> {

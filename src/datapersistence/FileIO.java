@@ -1,8 +1,8 @@
 package datapersistence;
 
-import game.MapList;
 import game.Location;
 import game.Map;
+import game.MapList;
 import interfaces.IMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

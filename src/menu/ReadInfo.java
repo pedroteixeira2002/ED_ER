@@ -1,7 +1,9 @@
 package menu;
 
-import game.*;
-import interfaces.IAlgorithm;
+import game.AlgorithmType;
+import game.Flag;
+import game.Location;
+import game.Player;
 
 import java.io.IOException;
 
@@ -49,7 +51,7 @@ public abstract class ReadInfo {
 
     public static String readName() throws IOException {
         System.out.println("Enter the player name");
-        return Tools.readString();
+        return Tools.GetString();
     }
 
 

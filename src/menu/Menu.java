@@ -20,10 +20,10 @@ public abstract class Menu {
 
             MapList maps = new MapList(); //Verficar propósito depois
             //Show the main menu
+            maps = FileIO.importFromJson();
             System.out.println(Display.displayMainMenu());
             System.out.print("Choose an option: ");
             int choice = GetInt();
-
             switch (choice) {
                 case 1:
                     System.out.println("Loading game...");
@@ -61,9 +61,6 @@ public abstract class Menu {
         boolean isRunning = true;
 
         while (isRunning) {
-            //The game will start
-            game.start();
-
             // Show game menu
             System.out.println(Display.displayNewGameMenu());
             System.out.print("Choose an option: ");

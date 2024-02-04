@@ -1,7 +1,7 @@
 package game;
 
-import collections.lists.OrderedLinkedList;
 import collections.lists.UnorderedLinkedList;
+import collections.queues.LinkedQueue;
 import interfaces.IGame;
 import menu.ReadInfo;
 import menu.Tools;
@@ -14,16 +14,19 @@ import java.util.Random;
 public class Game implements IGame {
     private Map map;
     private final UnorderedLinkedList<Player> players;
+    private final LinkedQueue<Player> playersQueue;
     private int round;
 
     public Game(Map map) {
         this.map = map;
+        this.playersQueue = new LinkedQueue<>();
         this.players = new UnorderedLinkedList<>();
         this.round = 1;
     }
 
     public Game() {
         this.map = new Map();
+        this.playersQueue = new LinkedQueue<>();
         this.players = new UnorderedLinkedList<>();
         this.round = 1;
     }
@@ -53,29 +56,41 @@ public class Game implements IGame {
         //setup players
         setupPlayer();
         //setup bots
-        setupBots();
+        players.head.getElement().addBots(players.head.getElement());
+        players.tail.getElement().addBots(players.tail.getElement());
         //round
         round();
     }
 
     private void round() {
-        while (checkVictory() != null) {
-            Iterator<Player> playersIterator = players.iterator();
-            while (playersIterator.hasNext()) {
-                Player currentPlayer = playersIterator.next();
-                Bot bot = currentPlayer.getBotsQueue().dequeue();
-                bot.getAlgorithm().move(bot, this);
-                currentPlayer.getBotsQueue().enqueue(bot);
-            }
-        }
-        round++;
+        //while (checkVictory() == null) {
+            moving();
+            moving();
+            round++;
+        //}
     }
 
+    private void moving() {
+        Player player = new Player();
+        Bot bot= new Bot();
+        //get player and bot by doing dequeue (dequeue returns the wished element)
+        bot = player.getBotsQueue().dequeue();
+
+        // moving the players bot
+        bot.getAlgorithm().move(bot, this);
+
+        player = playersQueue.dequeue();
+
+        //adding the bot and the player to the end of the list
+        playersQueue.enqueue(player);
+        player.getBotsQueue().enqueue(bot);
+    }
 
     /**
      * Set the base of the player in the map
      */
     public Flag setPlayerBaseInMap() throws IOException {
+
         System.out.println("Available locations: ");
         System.out.println(Arrays.toString(map.getGraphMap().getVertices()));
 
@@ -83,20 +98,12 @@ public class Game implements IGame {
         int xCoordinate = ReadInfo.readCoordinateX();
         int yCoordinate = ReadInfo.readCoordinateY();
 
-
-        Iterator<Player> playersIterator = players.iterator();
-        while (playersIterator.hasNext()) {
-            if (playersIterator.next().getBase().equals(new Location(xCoordinate, yCoordinate))) {
-                System.out.println("This location is already taken, choose another one:");
-                xCoordinate = ReadInfo.readCoordinateX();
-                yCoordinate = ReadInfo.readCoordinateY();
-            }
-        }
-
+        Flag flag = new Flag(new Location(xCoordinate, yCoordinate));
 
         System.out.println("Flag was set at the following location X:"
                 + xCoordinate + " Y:" + yCoordinate);
-        return new Flag(new Location(xCoordinate, yCoordinate));
+
+        return flag;
     }
 
     private String randomizeFirstPlayer(String name1, String name2) {
@@ -109,30 +116,32 @@ public class Game implements IGame {
 
     /**
      * Setup Players for the game, randomizes which is Player 1 and player 2.
+     *
      * @throws IOException
      */
     private void setupPlayer() throws IOException {
-            System.out.println("\nEnter the players names");
-            System.out.print("\nFirst name:");
-            String name1 = Tools.GetString();
+        Player player1 = new Player(), player2 = new Player();
 
-            System.out.print("\nSecond name:");
-            String name2 = Tools.GetString();
+        System.out.println("\nEnter the players names");
+        System.out.print("\nFirst name:");
+        String name1 = Tools.GetString();
 
-            Player player1 = new Player(randomizeFirstPlayer(name1, name2), setPlayerBaseInMap());
+        System.out.print("\nSecond name:");
+        String name2 = Tools.GetString();
 
+        player1.setName(randomizeFirstPlayer(name1, name2));
+        player1.setBase(setPlayerBaseInMap());
 
-            players.addToRear(player1);
+        players.addToRear(player1);
 
-            if (players.head.getElement().getName().equals(name1)) {
-                Player player2 = new Player(name2, setPlayerBaseInMap());
-            }
-    }
-
-    private void setupBots() throws IOException {
-        while (players.iterator().hasNext()) {
-            players.iterator().next().addBots();
-        }
+        if (players.head.getElement().getName().equals(name1)) {
+            player2.setName(name2);
+            player2.setBase(setPlayerBaseInMap());
+            players.addToRear(player2);
+        } else
+            player2.setName(name1);
+        player2.setBase(setPlayerBaseInMap());
+        players.addToRear(player2);
     }
 
     private Player checkVictory() {
@@ -151,14 +160,5 @@ public class Game implements IGame {
             }
         }
         return null;
-    }
-
-    /**
-     * Add a player to the game's player list.
-     */
-    public void addPlayer() throws IOException {
-        System.out.println("Enter the player name");
-        String name = Tools.GetString();
-        players.addToRear(new Player(name, setPlayerBaseInMap()));
     }
 }

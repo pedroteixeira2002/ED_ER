@@ -2,14 +2,14 @@ package game;
 
 import interfaces.IBot;
 
-import java.io.IOException;
-
 public class Bot implements IBot {
     private static int nextId = 0;
     private final int id;
     private Algorithm algorithm;
     private Location location;
     private final Player owner;
+    private boolean hasFlag = false;
+
 
     public Bot(Player owner, Algorithm algorithm) {
         this.id = nextId++;
@@ -21,6 +21,14 @@ public class Bot implements IBot {
         this.id = nextId++;
         this.owner = new Player();
         this.algorithm = new Algorithm();
+    }
+
+    public boolean hasFlag() {
+        return hasFlag;
+    }
+
+    public void setHasFlag(boolean hasFlag) {
+        this.hasFlag = hasFlag;
     }
 
     public Player getOwner() {
