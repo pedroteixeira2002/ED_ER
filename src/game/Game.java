@@ -55,22 +55,88 @@ public class Game implements IGame {
     public void start() throws IOException {
         //setup players
         setupPlayer();
+
         //setup bots
-        players.head.getElement().addBots(players.head.getElement());
-        players.tail.getElement().addBots(players.tail.getElement());
+        System.out.println("Setting up bots...");
+        defineNumberOfBots();
+        defineLocationBot();
+        //players.head.getElement().addBots(players.head.getElement());
+        //players.tail.getElement().addBots(players.tail.getElement());
         //round
         round();
     }
 
-    private void round() {
-        //while (checkVictory() == null) {
-            moving();
-            moving();
-            round++;
-        //}
+    /**
+     * Define the location of the bot the same as the player's base
+     */
+    private void defineLocationBot() {
+        Iterator<Player> iPlayers = players.iterator();
+        while (iPlayers.hasNext()) {
+            Player currentPlayer = iPlayers.next();
+            Iterator<Bot> bots = currentPlayer.getBots().iterator();
+            while (bots.hasNext()) {
+                Bot bot = bots.next();
+                bot.setLocation(currentPlayer.getBase().getLocation());
+            }
+        }
     }
 
-    private void moving() {
+    public void defineNumberOfBots() throws IOException {
+        for(Player player : players){
+            System.out.println("How many bots do you want to add for player " + player.getName() + "?");
+            int numberOfBots = Tools.GetInt();
+            System.out.println("You have chosen to add " + numberOfBots + " bots to the game.");
+            player.addBots2(player, numberOfBots);
+        }
+    }
+
+    private void round() {
+        /*
+        // Iterate through players for one round
+        Iterator<Player> playerIterator = players.iterator();
+        while (playerIterator.hasNext()) {
+            Player currentPlayer = playerIterator.next();
+
+            // Perform the move for the player's bot
+            moving(currentPlayer);
+
+            if (checkVictory() != null) {
+                System.out.println(checkVictory().getName() + " is the winner!");
+                break;
+            }
+        }
+        */
+        //while (checkVictory() == null) {
+        //moving();
+        //moving();
+        //round++;
+        //}
+
+        // Increment the round counter after each player has moved
+        //round++;
+
+        while (checkVictory() == null) {
+            Iterator<Player> playerIterator = players.iterator();
+            while (playerIterator.hasNext()) {
+                Player currentPlayer = playerIterator.next();
+
+                // Realiza o movimento para o bot do jogador
+                moving(currentPlayer);
+
+                // Verifica se há uma condição de vitória após cada movimento
+                if (checkVictory() != null) {
+                    System.out.println(checkVictory().getName() + " é o vencedor!");
+                    // Encerra o jogo
+                    return;
+                }
+            }
+            // Increment the round counter after each player has moved
+            round++;
+        }
+    }
+
+    private void moving(Player player) {
+        /*
         Player player = new Player();
         Bot bot= new Bot();
         //get player and bot by doing dequeue (dequeue returns the wished element)
@@ -82,6 +148,20 @@ public class Game implements IGame {
         player = playersQueue.dequeue();
 
         //adding the bot and the player to the end of the list
+        playersQueue.enqueue(player);
+        player.getBotsQueue().enqueue(bot);
+        */
+        //--------------------------------------------------------------------------------//
+
+        // Get the player's bot by dequeuing from the queue
+        Bot bot = player.getBotsQueue().dequeue();
+
+        // Perform the move using the player's algorithm
+        bot.getAlgorithm().move(bot, this);
+
+        player = playersQueue.dequeue();
+
+        // Enqueue the player and bot back to their respective queues
         playersQueue.enqueue(player);
         player.getBotsQueue().enqueue(bot);
     }
@@ -138,10 +218,11 @@ public class Game implements IGame {
             player2.setName(name2);
             player2.setBase(setPlayerBaseInMap());
             players.addToRear(player2);
-        } else
+        } else {
             player2.setName(name1);
-        player2.setBase(setPlayerBaseInMap());
-        players.addToRear(player2);
+            player2.setBase(setPlayerBaseInMap());
+            players.addToRear(player2);
+        }
     }
 
     private Player checkVictory() {
@@ -150,8 +231,8 @@ public class Game implements IGame {
         while (iPlayers.hasNext()) {
 
             Player currentPlayer = iPlayers.next();
-            Iterator<Bot> bots = players.iterator().next().getBots().iterator();
-
+            Iterator<Bot> bots = currentPlayer.getBots().iterator();
+            // players.iterator().next().getBots().iterator()
             while (bots.hasNext()) {
 
                 Bot bot = bots.next();

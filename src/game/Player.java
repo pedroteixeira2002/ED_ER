@@ -15,15 +15,7 @@ public class Player implements IPlayer {
     private final LinkedQueue<Bot> botsQueue;
     private Flag base;
     private Flag flag;
-    private Bot actualBot;
 
-    public Bot getActualBot() {
-        return actualBot;
-    }
-
-    public void setActualBot(Bot actualBot) {
-        this.actualBot = actualBot;
-    }
 
     public Player(String name, Flag base) {
         this.name = name;
@@ -84,6 +76,21 @@ public class Player implements IPlayer {
         bots.addToRear(bot1);
     }
 
+    public void addBots2(Player player, int numBots) throws IOException {
+        for (int i = 0; i < numBots; i++) {
+            Bot bot = new Bot();
+            Algorithm algorithm = new Algorithm();
+            algorithm.setType(whatAlgorithm().getType()); // Define o algoritmo para cada bot
+            bot.setAlgorithm(algorithm);
+
+            // Adiciona o bot à fila e à lista
+            player.getBotsQueue().enqueue(bot);
+            player.getBots().addToRear(bot);
+            System.out.println("Bot owner: " + bot.getOwner());
+
+        }
+    }
+
     private Algorithm whatAlgorithm() throws IOException {
         Algorithm algorithm = new Algorithm();
         System.out.println(displayAlgorithm());
@@ -99,4 +106,6 @@ public class Player implements IPlayer {
                 return algorithm;
         }
     }
+
+
 }
