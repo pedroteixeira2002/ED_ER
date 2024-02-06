@@ -53,6 +53,7 @@ public class Game implements IGame {
      */
     @Override
     public void start() throws IOException {
+        map.visualizeGraph();
         //setup players
         setupPlayer();
 

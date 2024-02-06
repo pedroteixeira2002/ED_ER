@@ -20,7 +20,7 @@ public abstract class Menu {
 
             MapList maps = new MapList(); //Verficar propósito depois
             //Show the main menu
-            maps = FileIO.importFromJson();
+            //maps = FileIO.importFromJson();
             System.out.println(Display.displayMainMenu());
             System.out.print("Choose an option: ");
             int choice = GetInt();
