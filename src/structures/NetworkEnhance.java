@@ -1,6 +1,5 @@
 package structures;
 
-import collections.graphs.Graph;
 import collections.graphs.Network;
 import game.Location;
 

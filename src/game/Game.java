@@ -35,11 +35,8 @@ public class Game implements IGame {
      */
     @Override
     public void start() throws IOException {
-<<<<<<< HEAD
         map.visualizeGraph();
-=======
         Location win = new Location(0, 0);
->>>>>>> 418de526542e0824ebdcc289f1803e5baeb91e8e
         //setup players
         setupPlayers();
 

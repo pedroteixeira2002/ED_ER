@@ -3,7 +3,6 @@ package game;
 import collections.graphs.Graph;
 import interfaces.IMap;
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import structures.NetworkEnhance;
@@ -180,7 +179,7 @@ public class Map implements IMap, Comparable<Map> {
      */
     public void visualizeGraph() {
         // Criar um gráfico do GraphStream
-        Graph graph = new SingleGraph("Map Visualization");
+        org.graphstream.graph.Graph graph = new SingleGraph("Map Visualization");
 
         // Configurar o layout (opcional)
         graph.addAttribute("ui.stylesheet", "node { fill-color: red; size: 20px; text-size: 20; } edge " +
