@@ -1,38 +1,24 @@
 package game;
 
-import collections.lists.UnorderedLinkedList;
 import collections.queues.LinkedQueue;
 import interfaces.IGame;
-import menu.ReadInfo;
 import menu.Tools;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Random;
 
 public class Game implements IGame {
     private Map map;
-    private final UnorderedLinkedList<Player> players;
-    private final LinkedQueue<Player> playersQueue;
-    private int round;
+    private LinkedQueue<Player> players;
+
+    public LinkedQueue<Player> getPlayers() {
+        return players;
+    }
 
     public Game(Map map) {
         this.map = map;
-        this.playersQueue = new LinkedQueue<>();
-        this.players = new UnorderedLinkedList<>();
-        this.round = 1;
-    }
+        this.players = new LinkedQueue<>();
 
-    public Game() {
-        this.map = new Map();
-        this.playersQueue = new LinkedQueue<>();
-        this.players = new UnorderedLinkedList<>();
-        this.round = 1;
-    }
-
-    public UnorderedLinkedList<Player> getPlayers() {
-        return players;
     }
 
     public Map getMap() {
@@ -43,148 +29,89 @@ public class Game implements IGame {
         this.map = map;
     }
 
-    public int getRound() {
-        return round;
-    }
-
 
     /**
      * Start a new game
      */
     @Override
     public void start() throws IOException {
+<<<<<<< HEAD
         map.visualizeGraph();
+=======
+        Location win = new Location(0, 0);
+>>>>>>> 418de526542e0824ebdcc289f1803e5baeb91e8e
         //setup players
-        setupPlayer();
+        setupPlayers();
 
         //setup bots
         System.out.println("Setting up bots...");
         defineNumberOfBots();
-        defineLocationBot();
-        //players.head.getElement().addBots(players.head.getElement());
-        //players.tail.getElement().addBots(players.tail.getElement());
-        //round
-        round();
+
+        //players play in their turn
+        //while nobody wins
+        while (!(turn().getPosX() == 1000)) ;
     }
 
-    /**
-     * Define the location of the bot the same as the player's base
-     */
-    private void defineLocationBot() {
-        Iterator<Player> iPlayers = players.iterator();
-        while (iPlayers.hasNext()) {
-            Player currentPlayer = iPlayers.next();
-            Iterator<Bot> bots = currentPlayer.getBots().iterator();
-            while (bots.hasNext()) {
-                Bot bot = bots.next();
-                bot.setLocation(currentPlayer.getBase().getLocation());
-            }
-        }
+    private Location turn() {
+        Player player = players.dequeue();
+        players.enqueue(player);
+        // Realiza o movimento para o bot do jogador
+        return moving(player);
     }
 
-    public void defineNumberOfBots() throws IOException {
-        for(Player player : players){
-            System.out.println("How many bots do you want to add for player " + player.getName() + "?");
-            int numberOfBots = Tools.GetInt();
-            System.out.println("You have chosen to add " + numberOfBots + " bots to the game.");
-            player.addBots2(player, numberOfBots);
-        }
+    private Location moving(Player player) {
+        Bot bot = player.getBots().dequeue();
+        player.getBots().enqueue(bot);
+
+        // Perform the move using the bot's algorithm
+        return bot.getAlgorithm().move(bot, this);
     }
 
-    private void round() {
-        /*
-        // Iterate through players for one round
-        Iterator<Player> playerIterator = players.iterator();
-        while (playerIterator.hasNext()) {
-            Player currentPlayer = playerIterator.next();
+    private void defineNumberOfBots() throws IOException {
+        Player player;
+        int numberOfBots;
 
-            // Perform the move for the player's bot
-            moving(currentPlayer);
+        player = players.dequeue();
 
-            if (checkVictory() != null) {
-                System.out.println(checkVictory().getName() + " is the winner!");
-                break;
-            }
-        }
-        */
-        //while (checkVictory() == null) {
-        //moving();
-        //moving();
-        //round++;
-        //}
+        System.out.println("How many bots do you want to add for player " + player.getName() + "?");
+        numberOfBots = Tools.GetInt();
+        System.out.println("You have chosen to add " + numberOfBots + " bots to the game.");
 
-        // Increment the round counter after each player has moved
-        //round++;
+        player.addBots(player, numberOfBots);
 
-        while (checkVictory() == null) {
-            Iterator<Player> playerIterator = players.iterator();
-            while (playerIterator.hasNext()) {
-                Player currentPlayer = playerIterator.next();
+        // Re-enqueue the player
+        players.enqueue(player);
 
-                // Realiza o movimento para o bot do jogador
-                moving(currentPlayer);
 
-                // Verifica se há uma condição de vitória após cada movimento
-                if (checkVictory() != null) {
-                    System.out.println(checkVictory().getName() + " é o vencedor!");
-                    // Encerra o jogo
-                    return;
-                }
-            }
-            // Increment the round counter after each player has moved
-            round++;
-        }
-    }
+        player = players.dequeue();
 
-    private void moving(Player player) {
-        /*
-        Player player = new Player();
-        Bot bot= new Bot();
-        //get player and bot by doing dequeue (dequeue returns the wished element)
-        bot = player.getBotsQueue().dequeue();
+        System.out.println("How many bots do you want to add for player " + player.getName() + "?");
+        numberOfBots = Tools.GetInt();
+        System.out.println("You have chosen to add " + numberOfBots + " bots to the game.");
 
-        // moving the players bot
-        bot.getAlgorithm().move(bot, this);
+        player.addBots(player, numberOfBots);
 
-        player = playersQueue.dequeue();
-
-        //adding the bot and the player to the end of the list
-        playersQueue.enqueue(player);
-        player.getBotsQueue().enqueue(bot);
-        */
-        //--------------------------------------------------------------------------------//
-
-        // Get the player's bot by dequeuing from the queue
-        Bot bot = player.getBotsQueue().dequeue();
-
-        // Perform the move using the player's algorithm
-        bot.getAlgorithm().move(bot, this);
-
-        player = playersQueue.dequeue();
-
-        // Enqueue the player and bot back to their respective queues
-        playersQueue.enqueue(player);
-        player.getBotsQueue().enqueue(bot);
+        // Re-enqueue the player
+        players.enqueue(player);
     }
 
     /**
      * Set the base of the player in the map
      */
-    public Flag setPlayerBaseInMap() throws IOException {
+    public Location setPlayerBaseInMap(Player player) throws IOException {
 
         System.out.println("Available locations: ");
-        System.out.println(Arrays.toString(map.getGraphMap().getVertices()));
+        System.out.println(map.getGraphMap().toString());
 
-        System.out.println("Choose a location for your flag");
-        int xCoordinate = ReadInfo.readCoordinateX();
-        int yCoordinate = ReadInfo.readCoordinateY();
+        System.out.println(player.getName() + ", choose a location for your flag (vertex index)");
+        int index = Tools.GetInt();
 
-        Flag flag = new Flag(new Location(xCoordinate, yCoordinate));
+        Location base = map.getGraphMap().getVertex(index);
 
-        System.out.println("Flag was set at the following location X:"
-                + xCoordinate + " Y:" + yCoordinate);
+        System.out.println("Flag was set at the following location\t\tX:"
+                + base.getPosX() + "\tY:" + base.getPosY());
 
-        return flag;
+        return base;
     }
 
     private String randomizeFirstPlayer(String name1, String name2) {
@@ -200,8 +127,10 @@ public class Game implements IGame {
      *
      * @throws IOException
      */
-    private void setupPlayer() throws IOException {
-        Player player1 = new Player(), player2 = new Player();
+    private void setupPlayers() throws IOException {
+
+        Player player1 = new Player();
+        Player player2 = new Player();
 
         System.out.println("\nEnter the players names");
         System.out.print("\nFirst name:");
@@ -211,36 +140,18 @@ public class Game implements IGame {
         String name2 = Tools.GetString();
 
         player1.setName(randomizeFirstPlayer(name1, name2));
-        player1.setBase(setPlayerBaseInMap());
+        player1.setBase(setPlayerBaseInMap(player1));
+        player1.setFlag(player1.getBase());
 
-        players.addToRear(player1);
+        players.enqueue(player1);
 
-        if (players.head.getElement().getName().equals(name1)) {
+        if (player1.getName().equals(name1)) {
             player2.setName(name2);
-            player2.setBase(setPlayerBaseInMap());
-            players.addToRear(player2);
         } else {
             player2.setName(name1);
-            player2.setBase(setPlayerBaseInMap());
-            players.addToRear(player2);
         }
-    }
-
-    private Player checkVictory() {
-        Iterator<Player> iPlayers = players.iterator();
-
-        while (iPlayers.hasNext()) {
-
-            Player currentPlayer = iPlayers.next();
-            Iterator<Bot> bots = currentPlayer.getBots().iterator();
-            // players.iterator().next().getBots().iterator()
-            while (bots.hasNext()) {
-
-                Bot bot = bots.next();
-                if (bot.getLocation().equals(new Location(1000, 1000)))
-                    return currentPlayer;
-            }
-        }
-        return null;
+        player2.setBase(setPlayerBaseInMap(player2));
+        player2.setFlag(player2.getBase());
+        players.enqueue(player2);
     }
 }

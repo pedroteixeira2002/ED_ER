@@ -1,5 +1,6 @@
 package game;
 
+import collections.graphs.Graph;
 import interfaces.IMap;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
@@ -144,6 +145,8 @@ public class Map implements IMap, Comparable<Map> {
 
         return this.graphMap.getVertex(randomIndex);
     }
+
+
 
     @Override
     public String toString() {

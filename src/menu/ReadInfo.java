@@ -1,9 +1,6 @@
 package menu;
 
 import game.AlgorithmType;
-import game.Flag;
-import game.Location;
-import game.Player;
 
 import java.io.IOException;
 
@@ -37,16 +34,6 @@ public abstract class ReadInfo {
     public static int readCoordinateY() throws IOException {
         System.out.println("\nEnter the coordinate for Y");
         return Tools.GetInt();
-    }
-
-    public static Player readPlayer() throws IOException {
-        return new Player(readName(), readFlag());
-    }
-
-    public static Flag readFlag() throws IOException {
-        Location location = new Location(readCoordinateX(), readCoordinateY());
-        return new Flag(location);
-
     }
 
     public static String readName() throws IOException {

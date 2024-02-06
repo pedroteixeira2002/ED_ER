@@ -7,7 +7,7 @@ public class Bot implements IBot {
     private final int id;
     private Algorithm algorithm;
     private Location location;
-    private final Player owner;
+    private Player owner;
     private boolean hasFlag = false;
 
 
@@ -29,6 +29,10 @@ public class Bot implements IBot {
 
     public void setHasFlag(boolean hasFlag) {
         this.hasFlag = hasFlag;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
     public Player getOwner() {
@@ -59,7 +63,7 @@ public class Bot implements IBot {
     public String toString() {
         return "\nBot:" +
                 "\nID: " + id +
-                "\nStart Location: " + location +
+                "\nLocation: " + location +
                 "\nAlgorithms this bot uses: " + algorithm.toString();
     }
 }

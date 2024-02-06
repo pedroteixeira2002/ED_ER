@@ -43,11 +43,9 @@ public abstract class Display {
 
     public static String displayAlgorithm() {
         return "\n Choose your algorithm." +
-                "\n\t1. Shortest Path" +
-                "\n\t2. Block Enemy Shortest Path" +
-                "\n\t3. Block Closest Enemy" +
-                "\n\t4. Random Path" +
-                "\n\t5. Minimum Spanning Tree Path";
+                "\n\t1. Try Catch Enemy Flag" +
+                "\n\t2. Random Path" +
+                "\n\t3. Minimum Spanning Tree Path";
     }
 
     public static String displayGameRules() {
