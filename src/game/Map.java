@@ -1,6 +1,10 @@
 package game;
 
 import interfaces.IMap;
+import org.graphstream.graph.Edge;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
 import structures.NetworkEnhance;
 
 import java.util.Iterator;
@@ -10,6 +14,7 @@ public class Map implements IMap, Comparable<Map> {
     private static int nextId = 1;
     private int id;
     private NetworkEnhance<Location> graphMap;
+    private Graph graph; // GraphStream graph
 
 
     public Map() {
@@ -157,5 +162,55 @@ public class Map implements IMap, Comparable<Map> {
     @Override
     public int compareTo(Map o) {
         return this.id - o.id;
+    }
+
+    public Graph getGraph() {
+        return graph;
+    }
+
+    public void setGraph(Graph graph) {
+        this.graph = graph;
+    }
+
+    /**
+     * Prints a visual representation of the map using a graphical interface.
+     */
+    public void visualizeGraph() {
+        // Criar um gráfico do GraphStream
+        Graph graph = new SingleGraph("Map Visualization");
+
+        // Configurar o layout (opcional)
+        graph.addAttribute("ui.stylesheet", "node { fill-color: red; size: 20px; text-size: 20; } edge " +
+                "{ fill-color: grey; size: 2px; text-size: 12; text-color: black; text-background-mode: plain; " +
+                "text-background-color: white; }");
+
+        // Adicionar vértices ao gráfico
+        Iterator<Location> vertexIterator = graphMap.iteratorDFS(graphMap.getVertex(0));
+        while (vertexIterator.hasNext()) {
+            Location location = vertexIterator.next();
+            Node node = graph.addNode(Integer.toString(location.hashCode()));
+            node.addAttribute("ui.label", location.toString());
+        }
+
+        // Adicionar arestas ao gráfico
+        for (int i = 0; i < graphMap.size(); i++) {
+            Iterator<Location> adjacentVerticesIterator = graphMap.iteratorBFS(graphMap.getVertex(i));
+            while (adjacentVerticesIterator.hasNext()) {
+                Location fromVertex = graphMap.getVertex(i);
+                Location toVertex = adjacentVerticesIterator.next();
+                double weight = graphMap.getEdgeWeight(fromVertex, toVertex);
+
+                // Verificar se o peso não é "Infinity" antes de adicionar a aresta
+                if (weight > 0 && weight != Double.POSITIVE_INFINITY) {
+                    Edge edge = graph.addEdge(Integer.toString(fromVertex.hashCode()) + "-" +
+                                    Integer.toString(toVertex.hashCode()),
+                            Integer.toString(fromVertex.hashCode()), Integer.toString(toVertex.hashCode()), true);
+                    edge.addAttribute("ui.label", weight);
+                }
+            }
+        }
+
+        // Exibir o gráfico
+        graph.display();
     }
 }
