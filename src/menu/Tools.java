@@ -1,5 +1,10 @@
 package menu;
 
+import collections.lists.UnorderedLinkedList;
+import collections.queues.LinkedQueue;
+import game.Bot;
+import game.Player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -52,5 +57,25 @@ public abstract class Tools {
             return false;
     }
 
+    public static UnorderedLinkedList<Bot> botQueueToUnorderedList(LinkedQueue<Bot> queue) {
+        Bot bot;
+        UnorderedLinkedList<Bot> unorderedList = new UnorderedLinkedList<>();
+        while (!queue.isEmpty()) {
+            bot = queue.dequeue();
+            unorderedList.addToRear(bot);
+            queue.enqueue(bot);
+        }
+        return unorderedList;
+    }
 
+    public static UnorderedLinkedList<Player> playerQueueToUnorderedList(LinkedQueue<Player> queue) {
+        UnorderedLinkedList<Player> unorderedList = new UnorderedLinkedList<>();
+        Player player;
+        while (!queue.isEmpty()) {
+            player = queue.dequeue();
+            unorderedList.addToRear(player);
+            queue.enqueue(player);
+        }
+        return unorderedList;
+    }
 }

@@ -1,28 +1,32 @@
+import game.Location;
+import game.Map;
+import game.MapList;
 import menu.Menu;
+import menu.Tools;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-       /* System.out.println("Hello world!");
-        ListMap listMap = new ListMap();
-
+/*
+        MapList listMap = new MapList();
         Map gameMap1 = new Map();
         listMap.addMap(gameMap1);
-        Map gameMap2 = new Map();
-        listMap.addMap(gameMap2);
-        Map gameMap3 = new Map();
-        listMap.addMap(gameMap3);
-        Map gameMap4 = new Map();
-        listMap.addMap(gameMap4);
-        Map gameMap5 = new Map();
-        listMap.addMap(gameMap5);
+        gameMap1.generateMap(4, true, 0.5);
 
-        gameMap1.generateMap(1, true, 0.5);
-        gameMap2.generateMap(15, true, 0.7);
-        gameMap3.generateMap(10, false, 0.9);
-        gameMap4.generateMap(5, false, 0.9);
-        gameMap5.generateMap(5, false, 0.9);
+        System.out.println(gameMap1);
+        System.out.println("start vertex index");
+        int x = Tools.GetInt();
+
+        System.out.println("destiny vertex index");
+        int y = Tools.GetInt();
+
+
+        Iterator<Location> iterator = gameMap1.getGraphMap().iteratorShortestPath(gameMap1.getGraphMap().getVertex(x),gameMap1.getGraphMap().getVertex(y));
+        System.out.println(iterator.next());
+
+        /*
 
         Map gameMap6 = new Map();
         gameMap6.generateMap(3, false, 0.7);
