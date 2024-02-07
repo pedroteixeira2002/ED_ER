@@ -120,25 +120,22 @@ public class Algorithm implements IAlgorithm {
     }
 
     public Location minimumSpanningTreePath(Bot bot, Game game) {
-
         // Iterador que percorre os vértices da MST
         Iterator<Location> list = iteratorMST(game);
 
-        // Atualizar a localização do bot
+        // Atualiza a localização do bot
         bot.setLocation(list.next());
 
         flagInTheWay(bot, game);
-
         checkVictory(bot, game);
 
         return bot.getLocation();
-
     }
 
     public Iterator<Location> iteratorMST(Game game) {
         NetworkEnhance<Location> mstNetwork = (NetworkEnhance<Location>) game.getMap().getGraphMap().mstNetwork();
-        return mstNetwork.iteratorDFS(mstNetwork.getVertex(0));
-        //se noa funcionar o erro está aqui, n pode ser zero
+        return mstNetwork.iteratorBFS(mstNetwork.getVertex(0));
+
     }
 
     /**

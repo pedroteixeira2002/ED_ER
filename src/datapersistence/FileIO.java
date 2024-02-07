@@ -35,25 +35,30 @@ public abstract class FileIO {
 
                 JSONArray edgesArray = new JSONArray();
 
-                // Itera sobre os vértices para obter informações das arestas
-                Iterator<Location> vertexIterator = nextMap.getGraphMap().iteratorDFS(nextMap.getGraphMap().getVertex(0));
-                while (vertexIterator.hasNext()) {
-                    Location fromVertex = vertexIterator.next();
+                try {
+                    // Itera sobre os vértices para obter informações das arestas
+                    Iterator<Location> vertexIterator = nextMap.getGraphMap().iteratorDFS(nextMap.getGraphMap().getVertex(0));
+                    while (vertexIterator.hasNext()) {
+                        Location fromVertex = vertexIterator.next();
 
-                    // Itera sobre os vértices adjacentes para obter informações das arestas
-                    Iterator<Location> adjacentVerticesIterator = nextMap.getGraphMap().iteratorBFS(fromVertex);
-                    while (adjacentVerticesIterator.hasNext()) {
-                        Location toVertex = adjacentVerticesIterator.next();
-                        double weight = nextMap.getGraphMap().getEdgeWeight(fromVertex, toVertex);
+                        // Itera sobre os vértices adjacentes para obter informações das arestas
+                        Iterator<Location> adjacentVerticesIterator = nextMap.getGraphMap().iteratorBFS(fromVertex);
+                        while (adjacentVerticesIterator.hasNext()) {
+                            Location toVertex = adjacentVerticesIterator.next();
+                            double weight = nextMap.getGraphMap().getEdgeWeight(fromVertex, toVertex);
 
-                        if (weight != Double.POSITIVE_INFINITY) {
-                            JSONObject edgeObject = new JSONObject();
-                            edgeObject.put("fromIndex", nextMap.getGraphMap().getIndex(fromVertex));
-                            edgeObject.put("toIndex", nextMap.getGraphMap().getIndex(toVertex));
-                            edgeObject.put("weight", weight);
-                            edgesArray.add(edgeObject);
+                            if (weight != Double.POSITIVE_INFINITY) {
+                                JSONObject edgeObject = new JSONObject();
+                                edgeObject.put("fromIndex", nextMap.getGraphMap().getIndex(fromVertex));
+                                edgeObject.put("toIndex", nextMap.getGraphMap().getIndex(toVertex));
+                                edgeObject.put("weight", weight);
+                                edgesArray.add(edgeObject);
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    System.err.println("Erro ao processar as arestas do grafo: " + e.getMessage());
+                    e.printStackTrace(); // Isso imprimirá o rastreamento da pilha para ajudar a diagnosticar o problema
                 }
 
                 mapObject.put("edges", edgesArray);
@@ -66,54 +71,63 @@ public abstract class FileIO {
             System.out.println("Exportação concluída com sucesso.");
         } catch (IOException e) {
             System.err.println("Erro ao exportar o grafo para JSON: " + e.getMessage());
+            e.printStackTrace(); // Isso imprimirá o rastreamento da pilha para ajudar a diagnosticar o problema
         }
     }
-
 
     public static MapList importFromJson() {
         MapList mapList = new MapList();
 
-        try {
-            Reader reader = new FileReader(directory);
+        try (Reader reader = new FileReader(directory)) {
             JSONParser parser = new JSONParser();
-
             JSONObject object = (JSONObject) parser.parse(reader);
 
             JSONArray maps = (JSONArray) object.get("maps");
-            IMap[] map = new IMap[maps.size()];
 
-            for (int i = 0; i < maps.size(); i++) {
-                map[i] = new Map();
+            if (maps != null) {  // Verifica se o array de mapas existe no JSON
+                IMap[] map = new IMap[maps.size()];
 
-                JSONObject mapTmp = (JSONObject) maps.get(i);
+                for (int i = 0; i < maps.size(); i++) {
+                    map[i] = new Map();
 
-                long id = (Long) mapTmp.get("id");
+                    JSONObject mapTmp = (JSONObject) maps.get(i);
 
-                JSONArray edgesArray = (JSONArray) mapTmp.get("edges");
-                for (int k = 0; k < edgesArray.size(); k++) {
-                    JSONObject edgeTmp = (JSONObject) edgesArray.get(k);
+                    long id = (Long) mapTmp.get("id");
 
-                    long fromIndex = (Long) edgeTmp.get("fromIndex");
-                    long toIndex = (Long) edgeTmp.get("toIndex");
-                    double weight = (Double) edgeTmp.get("weight");
+                    JSONArray edgesArray = (JSONArray) mapTmp.get("edges");
+                    for (int k = 0; k < edgesArray.size(); k++) {
+                        JSONObject edgeTmp = (JSONObject) edgesArray.get(k);
 
-                    map[i].getGraphMap().addVertex(new Location((int) fromIndex, 0)); // Adiciona o vértice de origem
-                    map[i].getGraphMap().addVertex(new Location((int) toIndex, 0));   // Adiciona o vértice de destino
-                    map[i].getGraphMap().addEdge((int) fromIndex, (int) toIndex, weight);
+                        long fromIndex = (Long) edgeTmp.get("fromIndex");
+                        long toIndex = (Long) edgeTmp.get("toIndex");
+                        double weight = (Double) edgeTmp.get("weight");
+
+                        map[i].getGraphMap().addVertex(new Location((int) fromIndex, 0));
+                        map[i].getGraphMap().addVertex(new Location((int) toIndex, 0));
+                        map[i].getGraphMap().addEdge((int) fromIndex, (int) toIndex, weight);
+                    }
+
+                    map[i].setId((int) id);
+                    mapList.addMap((Map) map[i]);
                 }
-
-                map[i].setId((int) id);
-                mapList.addMap((Map) map[i]);
             }
 
             return mapList;
 
         } catch (FileNotFoundException e) {
+            System.err.println("Arquivo JSON não encontrado: " + e.getMessage());
             throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
+            System.err.println("Erro ao importar JSON: " + e.getMessage());
+            e.printStackTrace(); // Isso imprimirá o rastreamento da pilha para ajudar a diagnosticar o problema
             throw new RuntimeException(e);
         }
     }
+
+    // This method check if the file is not empty
+    public static boolean fileIsNotEmpty() {
+        File file = new File(directory);
+        return file.length() > 0;
+    }
+
 }

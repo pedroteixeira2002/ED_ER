@@ -19,8 +19,10 @@ public abstract class Menu {
         while (isRunning) {
 
             MapList maps = new MapList(); //Verficar propósito depois
+            if(FileIO.fileIsNotEmpty()) {
+                maps = FileIO.importFromJson();
+            }
             //Show the main menu
-            //maps = FileIO.importFromJson();
             System.out.println(Display.displayMainMenu());
             System.out.print("Choose an option: ");
             int choice = GetInt();
@@ -61,6 +63,7 @@ public abstract class Menu {
         boolean isRunning = true;
 
         while (isRunning) {
+
             // Show game menu
             System.out.println(Display.displayNewGameMenu());
             System.out.print("Choose an option: ");
@@ -77,9 +80,8 @@ public abstract class Menu {
                     game.start();
                     break;
                 case 2:
-                    maps = FileIO.importFromJson();
-                    System.out.println(maps.getAllMaps());
                     game = new Game(maps.getMapById(GetInt()));
+                    game.start();
                     break;
                 case 0:
                     isRunning = false;
@@ -88,7 +90,6 @@ public abstract class Menu {
                     System.out.println("Invalid option, please choose a valid option.");
                     break;
             }
-
         }
     }
 }
