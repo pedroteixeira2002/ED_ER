@@ -1,5 +1,6 @@
 package datapersistence;
 
+import collections.lists.UnorderedLinkedList;
 import game.Location;
 import game.Map;
 import game.MapList;
@@ -10,7 +11,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 
 public abstract class FileIO {
@@ -21,6 +24,7 @@ public abstract class FileIO {
      */
     public static void exportToJSON(MapList listTmp) {
         JSONObject jsonObject = new JSONObject();
+
 
         try (FileWriter writer = new FileWriter(directory)) {
 
@@ -46,14 +50,30 @@ public abstract class FileIO {
                         while (adjacentVerticesIterator.hasNext()) {
                             Location toVertex = adjacentVerticesIterator.next();
                             double weight = nextMap.getGraphMap().getEdgeWeight(fromVertex, toVertex);
-
-                            if (weight != Double.POSITIVE_INFINITY) {
+                           /* if (weight != Double.POSITIVE_INFINITY) {
                                 JSONObject edgeObject = new JSONObject();
                                 edgeObject.put("fromIndex", nextMap.getGraphMap().getIndex(fromVertex));
                                 edgeObject.put("toIndex", nextMap.getGraphMap().getIndex(toVertex));
                                 edgeObject.put("weight", weight);
                                 edgesArray.add(edgeObject);
+*/
+                            if (weight != Double.POSITIVE_INFINITY) {
+                                JSONObject edgeObject = new JSONObject();
+                                JSONObject fromVertexObject = new JSONObject();
+                                JSONObject toVertexObject = new JSONObject();
+
+                                fromVertexObject.put("x", fromVertex.getPosX());
+                                fromVertexObject.put("y", fromVertex.getPosY());
+                                toVertexObject.put("x", toVertex.getPosX());
+                                toVertexObject.put("y", toVertex.getPosY());
+                                edgeObject.put("fromIndex", nextMap.getGraphMap().getIndex(fromVertex));
+                                edgeObject.put("toIndex", nextMap.getGraphMap().getIndex(toVertex));
+                                edgeObject.put("weight", weight);
+                                edgeObject.put("fromVertex", fromVertexObject);
+                                edgeObject.put("toVertex", toVertexObject);
+                                edgesArray.add(edgeObject);
                             }
+
                         }
                     }
                 } catch (Exception e) {
@@ -76,6 +96,8 @@ public abstract class FileIO {
     }
 
     public static MapList importFromJson() {
+        Set<Location> addedVertices = new HashSet<>(); // Set to store added vertices
+
         MapList mapList = new MapList();
 
         try (Reader reader = new FileReader(directory)) {
@@ -84,7 +106,8 @@ public abstract class FileIO {
 
             JSONArray maps = (JSONArray) object.get("maps");
 
-            if (maps != null) {  // Verifica se o array de mapas existe no JSON
+            if (maps != null)
+            {  // Verifica se o array de mapas existe no JSON
                 IMap[] map = new IMap[maps.size()];
 
                 for (int i = 0; i < maps.size(); i++) {
@@ -96,6 +119,7 @@ public abstract class FileIO {
 
                     JSONArray edgesArray = (JSONArray) mapTmp.get("edges");
                     for (int k = 0; k < edgesArray.size(); k++) {
+                        /*
                         JSONObject edgeTmp = (JSONObject) edgesArray.get(k);
 
                         long fromIndex = (Long) edgeTmp.get("fromIndex");
@@ -105,8 +129,38 @@ public abstract class FileIO {
                         map[i].getGraphMap().addVertex(new Location((int) fromIndex, 0));
                         map[i].getGraphMap().addVertex(new Location((int) toIndex, 0));
                         map[i].getGraphMap().addEdge((int) fromIndex, (int) toIndex, weight);
-                    }
+                    }*/
+                        JSONObject edgeTmp = (JSONObject) edgesArray.get(k);
 
+                        // Read vertex coordinates (x, y) from JSON
+                        JSONObject fromVertex = (JSONObject) edgeTmp.get("fromVertex");
+                        long fromX = ((Long) fromVertex.get("x")).intValue();
+                        long fromY = ((Long) fromVertex.get("y")).intValue();
+
+                        JSONObject toVertex = (JSONObject) edgeTmp.get("toVertex");
+                        long toX = ((Long) toVertex.get("x")).intValue();
+                        long toY = ((Long) toVertex.get("y")).intValue();
+
+                        // Create Location objects for vertices with x and y coordinates
+                        Location fromLocation = new Location((int) fromX, (int) fromY);
+                        Location toLocation = new Location((int) toX, (int) toY);
+
+                        //read weight
+                        double weight = (Double) edgeTmp.get("weight");
+
+                        if (!addedVertices.contains(fromLocation)) {
+                            // Add the vertex to the graph if it's not already added
+                            map[i].getGraphMap().addVertex(fromLocation);
+                            addedVertices.add(fromLocation); // Add the vertex to the set
+                        }
+                        if (!addedVertices.contains(toLocation)) {
+                            // Add the vertex to the graph if it's not already added
+                            map[i].getGraphMap().addVertex(toLocation);
+                            addedVertices.add(toLocation); // Add the vertex to the set
+                        }
+
+                        map[i].getGraphMap().addEdge(fromLocation,toLocation, weight);
+                    }
                     map[i].setId((int) id);
                     mapList.addMap((Map) map[i]);
                 }

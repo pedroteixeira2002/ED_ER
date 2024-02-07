@@ -80,6 +80,8 @@ public abstract class Menu {
                     game.start();
                     break;
                 case 2:
+                    System.out.println("Choose a map to load: ");
+                    maps.toString();
                     game = new Game(maps.getMapById(GetInt()));
                     game.start();
                     break;

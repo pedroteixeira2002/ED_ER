@@ -20,15 +20,9 @@ public class Game implements IGame {
         this.players = new LinkedQueue<>();
 
     }
-
     public Map getMap() {
         return map;
     }
-
-    public void setMap(Map map) {
-        this.map = map;
-    }
-
 
     /**
      * Start a new game
@@ -46,7 +40,7 @@ public class Game implements IGame {
 
         //players play in their turn
         //while nobody wins
-        while (!(turn().getPosX() == 1000)) ;
+        while (!(turn().getPosX() == 1000));
     }
 
     private Location turn() {
