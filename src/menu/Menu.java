@@ -13,6 +13,10 @@ import static menu.Tools.GetInt;
 
 public abstract class Menu {
 
+    /**
+     * Main menu
+     * @throws IOException
+     */
     public static void MainMenu() throws IOException {
         boolean isRunning = true;
 
@@ -54,7 +58,11 @@ public abstract class Menu {
         }
     }
 
-
+    /**
+     * Game menu
+     * @param maps
+     * @throws IOException
+     */
     public static void GameMenu(MapList maps) throws IOException {
         Map map = new Map();
         Game game = new Game(map);

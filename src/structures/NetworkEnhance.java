@@ -5,9 +5,17 @@ import game.Location;
 
 import java.lang.reflect.Field;
 
-
+/**
+ * This class is an enhancement of the Network class. It provides a method to get the index of a vertex and a method to
+ * get the weight of an edge between two vertices.
+ *
+ * @param <T>
+ */
 public class NetworkEnhance<T> extends Network<T> {
 
+    /**
+     * This constructor calls the constructor of the parent class (Network)
+     */
     public NetworkEnhance() {
         super();
     }
@@ -24,10 +32,14 @@ public class NetworkEnhance<T> extends Network<T> {
             return null;
         }
     }
+
+    /**
+     * This method returns the index of a vertex
+     * @return
+     */
     public T[] getVertices() {
         return this.vertices;
     }
-
 
     /**
      * This method returns the weight of the edge between two vertices
@@ -47,6 +59,13 @@ public class NetworkEnhance<T> extends Network<T> {
         }
     }
 
+    /**
+     * This method returns the weight of the edge between two vertices using reflection
+     *
+     * @param index1
+     * @param index2
+     * @return
+     */
     private double getEdgeWeightUsingReflection(int index1, int index2) {
         try {
             // Obter o campo adjMatrix da classe pai (Network) usando reflexão

@@ -1,6 +1,13 @@
 package menu;
-
+/**
+ * This class contains methods that are used to display the menu.
+ */
 public abstract class Display {
+    /**
+     * This method returns a string that is used to display the main menu.
+     *
+     * @return The string that was used to display the main menu.
+     */
     public static String displayMainMenu() {
         return " ____________________________________________________________________\n" +
                 "|                         Capture the Flag                          |\n" +
@@ -12,6 +19,11 @@ public abstract class Display {
                 "|___________________________________________________________________|";
     }
 
+    /**
+     * This method returns a string that is used to display the new game menu.
+     *
+     * @return The string that was used to display the new game menu.
+     */
     public static String displayNewGameMenu() {
         return " ____________________________________________________________________\n" +
                 "|                              New Game                             |\n" +
@@ -22,6 +34,11 @@ public abstract class Display {
                 "|___________________________________________________________________|\n";
     }
 
+    /**
+     * This method returns a string that is used to display the Bidirectional menu.
+     *
+     * @return The string that was used to display the bidirectional menu.
+     */
     public static String displayDirectional() {
         return " ___________________________________________________________________\n" +
                 "|                   Bidirectional paths                             |\n" +
@@ -32,8 +49,13 @@ public abstract class Display {
 
     }
 
+    /**
+     * This method returns a string that is used to display the save map menu.
+     *
+     * @return The string that was used to display the save map menu.
+     */
     public static String displaySaveMapMenu() {
-        return " ___________________________________________________________________\n" +
+        return "  ___________________________________________________________________\n" +
                 "|                        Creating new map                           |\n" +
                 "|___________________________________________________________________|\n" +
                 "|  1. Save map                                                      |\n" +
@@ -41,6 +63,11 @@ public abstract class Display {
                 "|___________________________________________________________________|\\n";
     }
 
+    /**
+     * This method returns a string that is used to display the algorithm menu.
+     *
+     * @return The string that was used to display the algorithm menu.
+     */
     public static String displayAlgorithm() {
         return "\n Choose your algorithm." +
                 "\n\t1. Try Catch Enemy Flag" +
@@ -48,6 +75,11 @@ public abstract class Display {
                 "\n\t3. Minimum Spanning Tree Path";
     }
 
+    /**
+     * This method returns a string that is used to display the game rules.
+     *
+     * @return The string that was used to display the game rules.
+     */
     public static String displayGameRules() {
         return "  ___________________________________________________________________\n" +
                 "|                              Rules                                |\n" +

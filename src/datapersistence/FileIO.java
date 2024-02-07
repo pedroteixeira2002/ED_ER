@@ -15,7 +15,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-
+/**
+ * Class to handle file input and output
+ */
 public abstract class FileIO {
     private static final String directory = "src\\database\\maps.json";
 
@@ -95,6 +97,9 @@ public abstract class FileIO {
         }
     }
 
+    /**
+     * Import the map list from a json file
+     */
     public static MapList importFromJson() {
         Set<Location> addedVertices = new HashSet<>(); // Set to store added vertices
 
@@ -178,7 +183,10 @@ public abstract class FileIO {
         }
     }
 
-    // This method check if the file is not empty
+    /**
+     * Check if the file is not empty
+     * @return
+     */
     public static boolean fileIsNotEmpty() {
         File file = new File(directory);
         return file.length() > 0;

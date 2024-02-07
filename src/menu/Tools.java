@@ -9,6 +9,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * This class contains methods that are used to read from the keyboard.
+ */
 public abstract class Tools {
 
     /**
@@ -49,7 +52,11 @@ public abstract class Tools {
         return Double.parseDouble(aux);
     }
 
-
+    /**
+     * This method returns a boolean that is read from the keyboard.
+     *
+     * @return The boolean that was read from the keyboard.
+     */
     public static boolean getTrue() throws IOException {
         if (Tools.GetInt() == 1)
             return true;
@@ -57,25 +64,4 @@ public abstract class Tools {
             return false;
     }
 
-    public static UnorderedLinkedList<Bot> botQueueToUnorderedList(LinkedQueue<Bot> queue) {
-        Bot bot;
-        UnorderedLinkedList<Bot> unorderedList = new UnorderedLinkedList<>();
-        while (!queue.isEmpty()) {
-            bot = queue.dequeue();
-            unorderedList.addToRear(bot);
-            queue.enqueue(bot);
-        }
-        return unorderedList;
-    }
-
-    public static UnorderedLinkedList<Player> playerQueueToUnorderedList(LinkedQueue<Player> queue) {
-        UnorderedLinkedList<Player> unorderedList = new UnorderedLinkedList<>();
-        Player player;
-        while (!queue.isEmpty()) {
-            player = queue.dequeue();
-            unorderedList.addToRear(player);
-            queue.enqueue(player);
-        }
-        return unorderedList;
-    }
 }

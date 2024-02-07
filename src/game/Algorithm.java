@@ -9,23 +9,45 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Class for the algorithm
+ */
 public class Algorithm implements IAlgorithm {
+    /** Random object */
     private final Random random;
+    /** The type of the algorithm */
     private AlgorithmType type;
 
+    /**
+     * Constructor for the algorithm
+     */
     public Algorithm() {
         this.type = null;
         this.random = new Random();
     }
 
+    /**
+     * Getter for the type
+     * @return
+     */
     public AlgorithmType getType() {
         return type;
     }
 
+    /**
+     * Setter for the type
+     * @param type
+     */
     public void setType(AlgorithmType type) {
         this.type = type;
     }
 
+    /**
+     * Move the bot according to the algorithm
+     * @param bot
+     * @param game
+     * @return the location of the bot
+     */
     public Location move(Bot bot, Game game) {
         switch (bot.getAlgorithm().getType()) {
             default:
@@ -39,6 +61,12 @@ public class Algorithm implements IAlgorithm {
         }
     }
 
+    /**
+     * Move the bot according to the shortest path algorithm
+     * @param bot
+     * @param game
+     * @return the location of the bot
+     */
     public Location shortestPath(Bot bot, Game game) {
 
         if (bot.hasFlag()) {
@@ -70,6 +98,12 @@ public class Algorithm implements IAlgorithm {
         return bot.getLocation();
     }
 
+    /**
+     * Move the bot according to the random path algorithm
+     * @param bot
+     * @param game
+     * @return the location of the bot
+     */
     public Location randomPath(Bot bot, Game game) {
 
         Location randomLocation = randomLocation(game);
@@ -88,13 +122,17 @@ public class Algorithm implements IAlgorithm {
 
     }
 
+    /**
+     * This method returns a random location in the map
+     * @param game
+     * @return a random location
+     */
     private Location randomLocation(Game game) {
         Object[] vertices = game.getMap().getGraphMap().getVertices();
         if (vertices == null || vertices.length == 0)
             throw new RuntimeException("There are no locations in the map");
 
         List<Location> verticesList = Arrays.asList(Arrays.copyOf(vertices, vertices.length, Location[].class));
-        Iterator<Location> vList = game.getMap().getGraphMap().iteratorDFS(game.getMap().getGraphMap().getVertex(0));
         Iterator<Location> iterator = game.getMap().getGraphMap().iteratorDFS(verticesList.get(0));
 
         int steps = random.nextInt(verticesList.size());
@@ -105,6 +143,12 @@ public class Algorithm implements IAlgorithm {
         return iterator.hasNext() ? iterator.next() : verticesList.get(0);
     }
 
+    /**
+     * Move the bot according to the try catch enemy path algorithm
+     * @param bot
+     * @param game
+     * @return the location of the bot
+     */
     public Location tryCatchEnemyFlag(Bot bot, Game game) {
         Player enemy = getOpponent(bot, game);
         Location enemyFlag = enemy.getFlag();
@@ -123,6 +167,12 @@ public class Algorithm implements IAlgorithm {
 
     }
 
+    /**
+     * Move the bot according to the minimum spanning tree path algorithm
+     * @param bot
+     * @param game
+     * @return the location of the bot
+     */
     public Location minimumSpanningTreePath(Bot bot, Game game) {
         // Iterador que percorre os vértices da MST
         Iterator<Location> list = iteratorMST(bot ,game);
@@ -133,11 +183,16 @@ public class Algorithm implements IAlgorithm {
         bot.setLocation(nextLocation);
 
         flagInTheWay(bot, game);
-        checkVictory(bot, game);
 
         return bot.getLocation();
     }
 
+    /**
+     * This method returns an iterator that iterates over the vertices of the minimum spanning tree
+     * @param bot
+     * @param game
+     * @return
+     */
     public Iterator<Location> iteratorMST(Bot bot, Game game) {
         NetworkEnhance<Location> mstNetwork = (NetworkEnhance<Location>) game.getMap().getGraphMap().mstNetwork();
 
@@ -151,7 +206,6 @@ public class Algorithm implements IAlgorithm {
     }
 
     /**
-<<<<<<< HEAD
      * This method finds the index of the bot location in the graph
      * @param mstNetwork
      * @param botLocationX
@@ -168,11 +222,8 @@ public class Algorithm implements IAlgorithm {
         return -1;
     }
 
-
     /**
      * If my location is the same of the enemy flag location, sends the enemy flag to the base
-=======
->>>>>>> deb1943d7ba0a5b94716eae57e0c5ae75c01e2ea
      * If I have the flag and other enemy bot is in my location, my flag returns to the base
      * If my location is the same of the enemy flag location, sends the enemy flag to the base
      *
@@ -207,8 +258,8 @@ public class Algorithm implements IAlgorithm {
         }
     }
 
-
     /**
+     * This method returns an iterator with all the bots playing
      * @param game
      * @return an iterator with all the bots playing
      */
@@ -237,6 +288,11 @@ public class Algorithm implements IAlgorithm {
         return bots.iterator();
     }
 
+    /**
+     * This method checks if the bot is in the base of the opponent
+     * @param bot
+     * @param game
+     */
     private void checkVictory(Bot bot, Game game) {
         if (bot.getLocation().equals(getOpponent(bot, game).getBase())) {
             System.out.println(bot.getOwner().getName() + " is the Winner!");
@@ -244,6 +300,12 @@ public class Algorithm implements IAlgorithm {
         }
     }
 
+    /**
+     * This method returns the opponent of the bot
+     * @param bot
+     * @param game
+     * @return
+     */
     private Player getOpponent(Bot bot, Game game) {
         Player myself = bot.getOwner();
         Player opponent = game.getPlayers().dequeue();
@@ -284,6 +346,10 @@ public class Algorithm implements IAlgorithm {
         checkVictory(bot, game);
     }
 
+    /**
+     * To String method
+     * @return
+     */
     @Override
     public String toString() {
         return "Algorithm{" +

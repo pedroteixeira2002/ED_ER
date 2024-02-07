@@ -10,31 +10,47 @@ import structures.NetworkEnhance;
 import java.util.Iterator;
 import java.util.Random;
 
+/**
+ * Represents a map in the game
+ */
 public class Map implements IMap, Comparable<Map> {
+    /** The nextID of the map */
     private static int nextId = 1;
+    /** The id of the map */
     private int id;
+    /** The graph of the map */
     private NetworkEnhance<Location> graphMap;
+    /** The GraphStream graph */
     private Graph graph; // GraphStream graph
 
-
+    /**
+     * Constructor for the map
+     */
     public Map() {
         this.id = nextId++;
         this.graphMap = new NetworkEnhance<>();
     }
 
+    /**
+     * Constructor for the map
+     * @param id
+     * @param graphMap
+     */
     public Map(int id, NetworkEnhance<Location> graphMap) {
         this.id = id;
         this.graphMap = graphMap;
     }
-
+    /**
+     * Get the map
+     * @return the map
+     */
     @Override
     public NetworkEnhance<Location> getGraphMap() {
         return graphMap;
     }
 
     /**
-     * Get the map
-     *
+     * This method generates a map with a given number of locations, edge density and bidirectional
      * @param numLocations
      * @param bidirectional
      * @param edgeDensity
@@ -128,6 +144,10 @@ public class Map implements IMap, Comparable<Map> {
         return id;
     }
 
+    /**
+     * Set the map id
+     * @param id
+     */
     @Override
     public void setId(int id) {
         this.id = id;
@@ -145,8 +165,10 @@ public class Map implements IMap, Comparable<Map> {
         return this.graphMap.getVertex(randomIndex);
     }
 
-
-
+    /**
+     * To String
+     * @return the map
+     */
     @Override
     public String toString() {
         String str = "\nMap Id: " + this.id + ":\n";
@@ -161,17 +183,14 @@ public class Map implements IMap, Comparable<Map> {
         return str;
     }
 
+    /**
+     * Compare to
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(Map o) {
         return this.id - o.id;
-    }
-
-    public Graph getGraph() {
-        return graph;
-    }
-
-    public void setGraph(Graph graph) {
-        this.graph = graph;
     }
 
     /**
@@ -215,6 +234,4 @@ public class Map implements IMap, Comparable<Map> {
         // Exibir o gráfico
         graph.display();
     }
-
-    
 }

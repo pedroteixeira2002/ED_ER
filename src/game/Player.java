@@ -47,34 +47,74 @@ public class Player implements IPlayer {
         return bots;
     }
 
+    /**
+     * Getter for the number of bots
+     * @return the number of bots
+     */
     public int getNumberOfBots() {
         return numberOfBots;
     }
 
+    /**
+     * Setter for the number of bots
+     * @param numberOfBots
+     */
     public void setNumberOfBots(int numberOfBots) {
         this.numberOfBots = numberOfBots;
     }
 
+    /**
+     * Getter for the flag
+     * @return the location of the flag
+     */
     public Location getFlag() {
         return flag;
     }
 
+    /**
+     * Setter for the name
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Getter for the name
+     * @return the name of the player
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Getter for the base
+     * @return
+     */
     public Location getBase() {
         return base;
     }
 
+    /**
+     * Setter for the base
+     * @param base
+     */
     public void setBase(Location base) {
         this.base = base;
     }
 
+    /**
+     * Adds bots to the player
+     * Set the number of bots that the player has
+     * Set the shortest path algorithm to the first bot
+     * Set the owner of the bot
+     * Set the location of the bot
+     * Set the bot to have the flag
+     * Add the bot to the queue of bots
+     * @param player
+     * @param numBots
+     * @throws IOException
+     */
     public void addBots(Player player, int numBots) throws IOException {
         Bot bot1 = new Bot();
         Algorithm algorithm1 = new Algorithm();
@@ -105,6 +145,11 @@ public class Player implements IPlayer {
         }
     }
 
+    /**
+     * Method to choose the algorithm for the bot
+     * @return the algorithm
+     * @throws IOException
+     */
     private Algorithm whatAlgorithm() throws IOException {
         Algorithm algorithm = new Algorithm();
         System.out.println(displayAlgorithm());

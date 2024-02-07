@@ -6,20 +6,37 @@ import menu.Tools;
 
 import java.io.IOException;
 import java.util.Random;
-
+/**
+ * Represents a game
+ */
 public class Game implements IGame {
+    /** The map of the game */
     private Map map;
+    /** The queue of players */
     private LinkedQueue<Player> players;
 
-    public LinkedQueue<Player> getPlayers() {
-        return players;
-    }
-
+    /**
+     * Constructor for the game
+     * @param map
+     */
     public Game(Map map) {
         this.map = map;
         this.players = new LinkedQueue<>();
 
     }
+
+    /**
+     * Getter for the players
+     * @return the players
+     */
+    public LinkedQueue<Player> getPlayers() {
+        return players;
+    }
+
+    /**
+     * Getter for the map
+     * @return the map
+     */
     public Map getMap() {
         return map;
     }
@@ -43,6 +60,10 @@ public class Game implements IGame {
         while (!(turn().getPosX() == 1000));
     }
 
+    /**
+     * Turn of the game
+     * @return the location of the move
+     */
     private Location turn() {
         Player player = players.dequeue();
         players.enqueue(player);
@@ -50,6 +71,11 @@ public class Game implements IGame {
         return moving(player);
     }
 
+    /**
+     * Move the bot of the player
+     * @param player
+     * @return the location of the move
+     */
     private Location moving(Player player) {
         Bot bot = player.getBots().dequeue();
         player.getBots().enqueue(bot);
@@ -58,6 +84,9 @@ public class Game implements IGame {
         return bot.getAlgorithm().move(bot, this);
     }
 
+    /**
+     * Define the number of bots for each player
+     */
     private void defineNumberOfBots() throws IOException {
         Player player;
         int numberOfBots;
@@ -105,6 +134,12 @@ public class Game implements IGame {
         return base;
     }
 
+    /**
+     * Randomize which player is the first
+     * @param name1
+     * @param name2
+     * @return the name of the first player
+     */
     private String randomizeFirstPlayer(String name1, String name2) {
         Random random = new Random();
         boolean choose = random.nextBoolean();
