@@ -118,6 +118,7 @@ public class Player implements IPlayer {
             case 3:
                 algorithm.setType(AlgorithmType.MINIMUM_SPANNING_TREE_PATH);
                 return algorithm;
+
         }
     }
 

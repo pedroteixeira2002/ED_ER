@@ -1,7 +1,6 @@
 package game;
 
 import collections.lists.UnorderedLinkedList;
-import collections.queues.LinkedQueue;
 import interfaces.IAlgorithm;
 import structures.NetworkEnhance;
 
@@ -51,8 +50,8 @@ public class Algorithm implements IAlgorithm {
             //atualizar a minha localização
             bot.setLocation(nextPosition);
             bot.getOwner().setFlag(bot.getLocation());
-            System.out.println("Bot:" + bot.getAlgorithm().getType() +
-                    "\t\tLocation: X:" + bot.getLocation().getPosX() +
+            System.out.println(bot.getOwner().getName() + ", your bot " + bot.getAlgorithm().getType() +
+                    " just moved to Location: X:" + bot.getLocation().getPosX() +
                     "\tY:" + bot.getLocation().getPosY());
 
             //print do peso do caminho mais curto
@@ -77,10 +76,12 @@ public class Algorithm implements IAlgorithm {
 
         bot.setLocation(randomLocation);
 
+        System.out.println(bot.getOwner().getName() + ", your bot " + bot.getAlgorithm().getType() +
+                " just moved to Location: X:" + bot.getLocation().getPosX() +
+                "\tY:" + bot.getLocation().getPosY());
+
         flagInTheWay(bot, game);
-        if (bot.getLocation().equals(getOpponent(bot, game).getBase())) {
-            System.out.println("Winner:" + bot.getOwner());
-        }
+
         checkVictory(bot, game);
 
         return bot.getLocation();
@@ -110,6 +111,9 @@ public class Algorithm implements IAlgorithm {
         Iterator<Location> path = game.getMap().getGraphMap().iteratorShortestPath(bot.getLocation(), enemyFlag);
 
         bot.setLocation(path.next());
+        System.out.println(bot.getOwner().getName() + ", your bot " + bot.getAlgorithm().getType() +
+                " just moved to Location: X:" + bot.getLocation().getPosX() +
+                "\tY:" + bot.getLocation().getPosY());
 
         flagInTheWay(bot, game);
 
@@ -147,6 +151,7 @@ public class Algorithm implements IAlgorithm {
     }
 
     /**
+<<<<<<< HEAD
      * This method finds the index of the bot location in the graph
      * @param mstNetwork
      * @param botLocationX
@@ -166,7 +171,10 @@ public class Algorithm implements IAlgorithm {
 
     /**
      * If my location is the same of the enemy flag location, sends the enemy flag to the base
+=======
+>>>>>>> deb1943d7ba0a5b94716eae57e0c5ae75c01e2ea
      * If I have the flag and other enemy bot is in my location, my flag returns to the base
+     * If my location is the same of the enemy flag location, sends the enemy flag to the base
      *
      * @param bot
      * @param game
@@ -175,20 +183,30 @@ public class Algorithm implements IAlgorithm {
 
         Iterator<Bot> bots = allBots(bot, game);
 
-        if (bot.getLocation().
-                equals(getOpponent(bot, game).getFlag()))//mandar a flag do enimigo para a base
-            getOpponent(bot, game).setFlag(getOpponent(bot, game).getBase());
-        if (bot.getLocation().
-                equals(bot.getOwner().getFlag())) {//se eu tiver a flag
-            while (bots.hasNext()) {
-                if (bots.next().getLocation().
-                        equals(bot.getLocation())) {//itera por todos os bots no mape se alguma das suas localizações for igual à minha
+        while (bots.hasNext()) {
 
-                    bot.getOwner().setFlag(bot.getOwner().getBase());//envia a minha flag par a minha base
-                }
+            Bot botTmp = bots.next();//itera por todos os bots no mape
+
+            if (botTmp.getLocation().equals(bot.getLocation()) //se a localização do bot temporário for igual à localização do meu bot
+                    && botTmp.getOwner().equals(getOpponent(bot, game)) //e o bot temporário for do inimigo
+                    && bot.getAlgorithm().getType().equals(AlgorithmType.SHORTEST_PATH)) {//se o meu bot for do tipo Shortest Path
+                //envia a minha flag par a minha base
+                bot.getOwner().setFlag(bot.getOwner().getBase());
+                System.out.println("The flag of " + bot.getOwner().getName() + " was sent to the base");
+                bot.setHasFlag(false);
+            }
+
+            if (botTmp.getOwner().equals(getOpponent(bot, game))//se o bot temporário for do inimigo
+                    && botTmp.getAlgorithm().getType().equals(AlgorithmType.SHORTEST_PATH)// e se o bot temporário for do tipo Shortest Path
+                    && bot.getLocation().equals(getOpponent(bot, game).getFlag())) {//se a minha localização for igual à flag do inimigo
+                //mandar a flag do enimigo para a base
+                getOpponent(bot, game).setFlag(getOpponent(bot, game).getBase());
+                System.out.println("The flag of " + getOpponent(bot, game).getName() + " was sent to the base");
+                botTmp.setHasFlag(false);
             }
         }
     }
+
 
     /**
      * @param game
@@ -198,23 +216,20 @@ public class Algorithm implements IAlgorithm {
         int round = 0;
         UnorderedLinkedList<Bot> bots = new UnorderedLinkedList<>();
 
-        // Access bots owned by the player associated with the provided bot
-        LinkedQueue<Bot> playerBotsQueue = bot.getOwner().getBots();
         while (round < bot.getOwner().getNumberOfBots()) {
-            Bot playerBot = playerBotsQueue.dequeue();
+            Bot playerBot = bot.getOwner().getBots().dequeue();
+            bot.getOwner().getBots().enqueue(playerBot);
             bots.addToRear(playerBot);
-            playerBotsQueue.enqueue(bot);
             round++;
         }
 
         round = 0;
         // Access bots owned by the opponent through the game object
         Player opponent = getOpponent(bot, game);
-        LinkedQueue<Bot> opponentBotsQueue = opponent.getBots();
         while (round < opponent.getNumberOfBots()) {
-            Bot opponentBot = opponentBotsQueue.dequeue();
+            Bot opponentBot = opponent.getBots().dequeue();
+            opponent.getBots().enqueue(opponentBot);
             bots.addToRear(opponentBot);
-            opponentBotsQueue.enqueue(opponentBot);
             round++;
         }
 
@@ -233,6 +248,11 @@ public class Algorithm implements IAlgorithm {
         Player myself = bot.getOwner();
         Player opponent = game.getPlayers().dequeue();
         game.getPlayers().enqueue(opponent);
+
+        //return to the same position
+        Player temp = game.getPlayers().dequeue();
+        game.getPlayers().enqueue(temp);
+
 
         if (myself.equals(opponent)) {
             opponent = game.getPlayers().dequeue();
@@ -255,6 +275,9 @@ public class Algorithm implements IAlgorithm {
 
         //atualizar a minha localização
         bot.setLocation(list.next());
+        System.out.println(bot.getOwner().getName() + ", your bot " + bot.getAlgorithm().getType() +
+                " just moved to Location: X:" + bot.getLocation().getPosX() +
+                "\tY:" + bot.getLocation().getPosY());
 
         flagInTheWay(bot, game);
 
