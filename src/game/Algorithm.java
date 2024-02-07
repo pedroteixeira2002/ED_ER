@@ -121,10 +121,12 @@ public class Algorithm implements IAlgorithm {
 
     public Location minimumSpanningTreePath(Bot bot, Game game) {
         // Iterador que percorre os vértices da MST
-        Iterator<Location> list = iteratorMST(game);
+        Iterator<Location> list = iteratorMST(bot ,game);
+
+        Location nextLocation = list.next();
 
         // Atualiza a localização do bot
-        bot.setLocation(list.next());
+        bot.setLocation(nextLocation);
 
         flagInTheWay(bot, game);
         checkVictory(bot, game);
@@ -132,11 +134,35 @@ public class Algorithm implements IAlgorithm {
         return bot.getLocation();
     }
 
-    public Iterator<Location> iteratorMST(Game game) {
+    public Iterator<Location> iteratorMST(Bot bot, Game game) {
         NetworkEnhance<Location> mstNetwork = (NetworkEnhance<Location>) game.getMap().getGraphMap().mstNetwork();
-        return mstNetwork.iteratorBFS(mstNetwork.getVertex(0));
 
+        int botLocationX = bot.getLocation().getPosX();
+        int botLocationY = bot.getLocation().getPosY();
+
+        // Encontre o índice correspondente no grafo
+        int initialLocationIndex = findLocationIndex(mstNetwork, botLocationX, botLocationY);
+
+        return mstNetwork.iteratorBFS(mstNetwork.getVertex(initialLocationIndex));
     }
+
+    /**
+     * This method finds the index of the bot location in the graph
+     * @param mstNetwork
+     * @param botLocationX
+     * @param botLocationY
+     * @return
+     */
+    private int findLocationIndex(NetworkEnhance<Location> mstNetwork, int botLocationX, int botLocationY) {
+        Location[] vertices = mstNetwork.getVertices();
+        for (int i = 0; i < vertices.length; i++) {
+            if (vertices[i].getPosX() == botLocationX && vertices[i].getPosY() == botLocationY) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
     /**
      * If my location is the same of the enemy flag location, sends the enemy flag to the base

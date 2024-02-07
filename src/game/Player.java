@@ -9,12 +9,20 @@ import java.io.IOException;
 import static menu.Display.displayAlgorithm;
 
 public class Player implements IPlayer {
+    /** The name of the player */
     private String name;
+    /** The queue of bots that the player has */
     private final LinkedQueue<Bot> bots;
+    /** The location of the base of the player */
     private Location base;
+    /** The location of the flag of the player */
     private Location flag;
+    /** The number of bots that the player has */
     private int numberOfBots;
 
+    /**
+     * Constructor for the player
+     */
     public Player() {
         this.name = null;
         this.bots = new LinkedQueue<>();
@@ -23,10 +31,18 @@ public class Player implements IPlayer {
         this.numberOfBots = 0;
     }
 
+    /**
+     * Setter for the flag
+     * @param flag
+     */
     public void setFlag(Location flag) {
         this.flag = flag;
     }
 
+    /**
+     * Getter for the bots
+     * @return the queue of bots
+     */
     public LinkedQueue<Bot> getBots() {
         return bots;
     }
